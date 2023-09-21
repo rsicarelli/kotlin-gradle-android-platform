@@ -39,9 +39,8 @@ internal fun Project.applyAndroidLibrary() {
     }
 }
 
-private fun Project.applyAndroidCommon() {
-
-    androidCommonExtension {
+private fun Project.applyAndroidCommon() =
+    with(commonExtension) {
         namespace = "com.rsicarelli.kplatform"
         compileSdk = 34
 
@@ -63,24 +62,19 @@ private fun Project.applyAndroidCommon() {
         buildFeatures {
             compose = true
         }
+
         composeOptions {
             kotlinCompilerExtensionVersion = libs.version("composeKotlinCompilerExtension")
         }
+
         packaging {
             resources {
                 excludes += "/META-INF/{AL2.0,LGPL2.1}"
             }
         }
     }
-}
 
-private val Project.androidExtension: CommonExtension<*, *, *, *, *>
+private val Project.commonExtension: CommonExtension<*, *, *, *, *>
     get() = extensions.findByType<ApplicationExtension>()
         ?: extensions.findByType<LibraryExtension>()
         ?: error("Android plugin not applied")
-
-private fun Project.androidCommonExtension(
-    block: CommonExtension<*, *, *, *, *>.() -> Unit,
-) {
-    androidExtension.apply(block)
-}
