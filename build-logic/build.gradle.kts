@@ -6,7 +6,7 @@ dependencies {
     compileOnly(libs.gradlePlugin.android)
 }
 gradlePlugin {
-    val greeting by plugins.creating {
+    plugins.register("kplatformPlugin") {
         id = "com.rsicarelli.kplatform"
         implementationClass = "com.rsicarelli.kplatform.KplatformPlugin"
     }
