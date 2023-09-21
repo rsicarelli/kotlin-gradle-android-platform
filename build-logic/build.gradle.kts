@@ -5,6 +5,7 @@ plugins {
 dependencies {
     compileOnly(libs.gradlePlugin.android)
 }
+
 gradlePlugin {
     plugins.register("kplatformPlugin") {
         id = "com.rsicarelli.kplatform"
