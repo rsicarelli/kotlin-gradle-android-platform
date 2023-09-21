@@ -12,3 +12,5 @@ class KplatformPlugin : Plugin<Project> {
 }
 
 fun Project.androidApp() = applyAndroidApp()
+
+fun Project.androidLibrary() = applyAndroidLibrary()

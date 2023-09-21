@@ -53,9 +53,8 @@ internal fun Project.applyAndroidApp() {
     }
 }
 
-internal fun Project.androidLibrary() {
-    extensions.configure<LibraryExtension>() {
-
+internal fun Project.applyAndroidLibrary() {
+    extensions.configure<LibraryExtension> {
         namespace = "com.rsicarelli.kplatform"
         compileSdk = 34
 
