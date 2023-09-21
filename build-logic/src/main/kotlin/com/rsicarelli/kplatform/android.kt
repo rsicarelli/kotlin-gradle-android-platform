@@ -10,6 +10,7 @@ import org.gradle.kotlin.dsl.findByType
 
 internal fun Project.applyAndroidApp() {
     applyAndroidCommon()
+
     extensions.configure<ApplicationExtension> {
         defaultConfig {
             applicationId = "com.rsicarelli.kplatform"
@@ -29,6 +30,7 @@ internal fun Project.applyAndroidApp() {
 
 internal fun Project.applyAndroidLibrary() {
     applyAndroidCommon()
+
     extensions.configure<LibraryExtension> {
         buildTypes {
             release {
