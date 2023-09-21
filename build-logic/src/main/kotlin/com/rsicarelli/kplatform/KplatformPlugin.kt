@@ -8,11 +8,7 @@ import org.gradle.api.Project
 
 class KplatformPlugin : Plugin<Project> {
 
-    override fun apply(project: Project) {
-        project.tasks.register("greeting") {
-            doLast {
-                println("Hello from plugin 'build.logic.greeting'")
-            }
-        }
-    }
+    override fun apply(project: Project) = Unit
 }
+
+fun Project.androidApp() = applyAndroidApp()
