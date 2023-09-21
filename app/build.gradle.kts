@@ -1,6 +1,6 @@
 plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
+    id(libs.plugins.android.application.get().pluginId)
+    kotlin("android")
 }
 
 android {
