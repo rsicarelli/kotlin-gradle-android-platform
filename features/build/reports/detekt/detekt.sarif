@@ -4,50 +4,6 @@
   "runs": [
     {
       "results": [
-        {
-          "level": "warning",
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "/Users/rodrigosicarelli/Workspace/Educacional/kplatform/features/home/build.gradle.kts"
-                },
-                "region": {
-                  "endColumn": 2,
-                  "endLine": 13,
-                  "startColumn": 15,
-                  "startLine": 9
-                }
-              }
-            }
-          ],
-          "message": {
-            "text": "Missing trailing comma before \")\""
-          },
-          "ruleId": "detekt.formatting.TrailingCommaOnCallSite"
-        },
-        {
-          "level": "warning",
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "/Users/rodrigosicarelli/Workspace/Educacional/kplatform/features/details/build.gradle.kts"
-                },
-                "region": {
-                  "endColumn": 2,
-                  "endLine": 13,
-                  "startColumn": 15,
-                  "startLine": 9
-                }
-              }
-            }
-          ],
-          "message": {
-            "text": "Missing trailing comma before \")\""
-          },
-          "ruleId": "detekt.formatting.TrailingCommaOnCallSite"
-        }
       ],
       "tool": {
         "driver": {

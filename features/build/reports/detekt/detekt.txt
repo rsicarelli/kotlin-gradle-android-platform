@@ -1,2 +1,0 @@
-TrailingCommaOnCallSite - [Build_gradle] at /Users/rodrigosicarelli/Workspace/Educacional/kplatform/features/home/build.gradle.kts:9:15 - Signature=build.gradle.kts$( compilationOptionsBuilder = { optIn(ExperimentalMaterial3) } )
-TrailingCommaOnCallSite - [Build_gradle] at /Users/rodrigosicarelli/Workspace/Educacional/kplatform/features/details/build.gradle.kts:9:15 - Signature=build.gradle.kts$( compilationOptionsBuilder = { optIn(ExperimentalCoroutinesApi) } )

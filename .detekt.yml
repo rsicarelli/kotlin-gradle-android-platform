@@ -280,10 +280,10 @@ formatting:
     active: true
     autoCorrect: true
   TrailingCommaOnCallSite:
-    active: true
+    active: false
     excludes: [ '**/compose/tokens/**' ]
   TrailingCommaOnDeclarationSite:
-    active: true
+    active: false
   TypeArgumentListSpacing:
     active: false
   UnnecessaryParenthesesBeforeTrailingLambda:
