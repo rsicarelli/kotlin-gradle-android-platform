@@ -4,6 +4,7 @@ package com.rsicarelli.kplatform
 
 import com.rsicarelli.kplatform.AndroidOptions.AndroidAppOptions
 import com.rsicarelli.kplatform.AndroidOptions.AndroidLibraryOptions
+import com.rsicarelli.kplatform.AndroidOptions.AndroidLibraryOptions.BuildFeaturesConfig
 import org.gradle.api.JavaVersion
 
 sealed class AndroidOptions(
@@ -45,6 +46,7 @@ sealed class AndroidOptions(
     )
 
     data class AndroidLibraryOptions(
+        val buildFeaturesConfig: BuildFeaturesConfig,
         override val proguardOptions: ProguardOptions,
         override val namespace: String,
         override val compileSdk: Int,
@@ -64,7 +66,14 @@ sealed class AndroidOptions(
         packagingOptions = packagingOptions,
         proguardOptions = proguardOptions,
         buildTypes = buildTypes
-    )
+    ) {
+
+        data class BuildFeaturesConfig(
+            val generateAndroidResources: Boolean = false,
+            val generateResValues: Boolean = false,
+            val generateBuildConfig: Boolean = false,
+        )
+    }
 }
 
 data class ProguardOptions(
@@ -155,10 +164,15 @@ class AndroidAppOptionsBuilder : AndroidOptionsBuilder() {
 
 class AndroidLibraryOptionsBuilder : AndroidOptionsBuilder() {
 
-    private var proguardOptionsBuilder = ProguardOptionsBuilder("consumer-proguard-rules.pro")
+    var proguardOptionsBuilder = ProguardOptionsBuilder("consumer-proguard-rules.pro")
+    var buildFeaturesConfigBuilder = BuildFeaturesBuilder()
 
-    fun proguardOptions(init: ProguardOptionsBuilder.() -> Unit) {
-        proguardOptionsBuilder.apply(init)
+    fun proguardOptions(block: ProguardOptionsBuilder.() -> Unit) {
+        proguardOptionsBuilder.apply(block)
+    }
+
+    fun buildFeaturesConfig(block: BuildFeaturesBuilder.() -> Unit) {
+        buildFeaturesConfigBuilder.apply(block)
     }
 
     override fun build(): AndroidLibraryOptions = AndroidLibraryOptions(
@@ -170,7 +184,8 @@ class AndroidLibraryOptionsBuilder : AndroidOptionsBuilder() {
         javaVersion = javaVersion,
         composeOptions = composeOptions,
         packagingOptions = packagingOptions,
-        buildTypes = buildTypes
+        buildTypes = buildTypes,
+        buildFeaturesConfig = buildFeaturesConfigBuilder.build()
     )
 }
 
@@ -182,5 +197,18 @@ class ProguardOptionsBuilder(defaultFileName: String) {
     fun build(): ProguardOptions = ProguardOptions(
         fileName = fileName,
         applyWithOptimizedVersion = applyWithOptimizedVersion
+    )
+}
+
+class BuildFeaturesBuilder() {
+
+    var generateAndroidResources: Boolean = false
+    var generateResValues: Boolean = false
+    var generateBuildConfig: Boolean = false
+
+    fun build(): BuildFeaturesConfig = BuildFeaturesConfig(
+        generateAndroidResources = generateAndroidResources,
+        generateResValues = generateResValues,
+        generateBuildConfig = generateBuildConfig
     )
 }

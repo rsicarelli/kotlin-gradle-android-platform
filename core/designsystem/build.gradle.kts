@@ -6,7 +6,11 @@ plugins {
     id(libs.plugins.rsicarelli.kplatform.get().pluginId)
 }
 
-androidLibrary()
+androidLibrary {
+    buildFeaturesConfig {
+        generateAndroidResources = true
+    }
+}
 
 dependencies {
     implementation(platform(libs.androidx.compose.bom))

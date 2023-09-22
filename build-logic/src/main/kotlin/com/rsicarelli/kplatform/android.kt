@@ -46,6 +46,12 @@ internal fun Project.applyAndroidLibrary(androidLibraryOptions: AndroidLibraryOp
         }
 
         setLibraryBuildTypes(androidLibraryOptions)
+
+        buildFeatures {
+            androidResources = androidLibraryOptions.buildFeaturesConfig.generateAndroidResources
+            resValues = androidLibraryOptions.buildFeaturesConfig.generateResValues
+            buildConfig = androidLibraryOptions.buildFeaturesConfig.generateBuildConfig
+        }
     }
 }
 
