@@ -23,6 +23,7 @@
             <option value="$PROJECT_DIR$/build-logic" />
             <option value="$PROJECT_DIR$/core" />
             <option value="$PROJECT_DIR$/core/designsystem" />
+            <option value="$PROJECT_DIR$/core/threading" />
             <option value="$PROJECT_DIR$/features" />
             <option value="$PROJECT_DIR$/features/details" />
             <option value="$PROJECT_DIR$/features/home" />

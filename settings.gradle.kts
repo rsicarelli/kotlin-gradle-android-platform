@@ -19,4 +19,4 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "kplatform"
-include(":app", ":features:details", ":features:home", ":core:designsystem")
+include(":app", ":features:details", ":features:home", ":core:designsystem", ":core:threading")
