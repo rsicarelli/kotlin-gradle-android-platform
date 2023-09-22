@@ -10,21 +10,27 @@ import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.withType
 
+/**
+ * Configures the Detekt linting tool for the given project using the provided options.
+ *
+ * Note: This function must be called only on the root project.
+ *
+ * @param detektOptions Configuration options for the Detekt tool.
+ * @throws IllegalStateException if the function is not called on the root project.
+ *
+ * @see DetektOptions
+ * @see DetektExtension
+ */
 internal fun Project.applyDetekt(
     detektOptions: DetektOptions
 ) {
     check(rootProject == this) { "Must be called on a root project" }
 
-    val klintVersion = libs.version("detekt")
-    val detektComposeRules = libs.findLibrary("detektRules-compose").get().get()
-    val detektFormattingRules = libs.findLibrary("detektRules-formatting").get().get()
-    val detektLibraries = libs.findLibrary("detektRules-libraries").get().get()
-
     pluginManager.apply("io.gitlab.arturbosch.detekt")
 
     extensions.configure<DetektExtension> {
         parallel = detektOptions.parallel
-        toolVersion = klintVersion
+        toolVersion = libs.version("detekt")
         buildUponDefaultConfig = detektOptions.buildUponDefaultConfig
         config.setFrom(detektOptions.configFileNames.map { "$rootDir/$it" })
     }
@@ -35,13 +41,32 @@ internal fun Project.applyDetekt(
         exclude(detektOptions.excludes)
     }
 
-    dependencies {
-        detektPlugins(detektComposeRules)
-        detektPlugins(detektFormattingRules)
-        detektPlugins(detektLibraries)
-    }
+    addDetektPlugins(listOf("compose", "formatting", "libraries"))
 }
 
-fun DependencyHandlerScope.detektPlugins(dependency: MinimalExternalModuleDependency) {
-    add("detektPlugins", dependency)
+/**
+ * Adds the specified Detekt plugins to the project.
+ *
+ * This function facilitates the inclusion of Detekt plugins by appending the prefix `detektRules-`
+ * to each provided plugin name, resolving them via the `libs` handler, and then adding them to the
+ * `detektPlugins` dependency configuration.
+ *
+ * NOTE: it should match with Version catalog library declaration
+ *
+ * @param detektPlugins List of Detekt plugin names (without the `detektRules-` prefix).
+ *                      For instance, if you have a library named "detektRules-compose",
+ *                      you'd simply pass in "compose".
+ *
+ * @receiver [Project] The Gradle project on which the function is applied.
+ */
+fun Project.addDetektPlugins(detektPlugins: List<String>) {
+    fun DependencyHandlerScope.detektPlugin(dependency: MinimalExternalModuleDependency) {
+        add("detektPlugins", dependency)
+    }
+
+    dependencies {
+        detektPlugins.forEach { plugin ->
+            detektPlugin(libs.findLibrary("detektRules-$plugin").get().get())
+        }
+    }
 }
