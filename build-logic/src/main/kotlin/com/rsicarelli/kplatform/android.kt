@@ -1,11 +1,15 @@
 package com.rsicarelli.kplatform
 
+import com.android.build.api.dsl.ApplicationBuildType
 import com.android.build.api.dsl.ApplicationExtension
 import com.android.build.api.dsl.CommonExtension
+import com.android.build.api.dsl.LibraryBuildType
 import com.android.build.api.dsl.LibraryExtension
+import com.android.build.gradle.ProguardFiles.getDefaultProguardFile
 import com.rsicarelli.kplatform.AndroidOptions.AndroidAppOptions
 import com.rsicarelli.kplatform.AndroidOptions.AndroidLibraryOptions
 import org.gradle.api.Project
+import org.gradle.api.file.DirectoryProperty
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.findByType
 
@@ -21,15 +25,32 @@ internal fun Project.applyAndroidApp(androidAppOptions: AndroidAppOptions) {
         }
 
         buildTypes {
-            release {
-                isMinifyEnabled = false
-                androidAppOptions.proguardOptions.applyWithOptimizedVersion.takeIf { it }
-                    ?.let {
-                        proguardFiles(
-                            getDefaultProguardFile("proguard-android-optimize.txt"),
-                            androidAppOptions.proguardOptions.fileName
+            androidAppOptions.buildTypes.forEach { androidBuildType ->
+                when (androidBuildType) {
+                    DebugBuildType -> debug {
+                        applyFrom(
+                            androidBuildType = androidBuildType,
+                            proguardOptions = androidAppOptions.proguardOptions,
+                            buildDirectory = this@applyAndroidApp.layout.buildDirectory
                         )
-                    } ?: proguardFiles(androidAppOptions.proguardOptions.fileName)
+                    }
+
+                    ReleaseBuildType -> release {
+                        applyFrom(
+                            androidBuildType = androidBuildType,
+                            proguardOptions = androidAppOptions.proguardOptions,
+                            buildDirectory = this@applyAndroidApp.layout.buildDirectory
+                        )
+                    }
+
+                    else -> getByName(androidBuildType.name) {
+                        applyFrom(
+                            androidBuildType = androidBuildType,
+                            proguardOptions = androidAppOptions.proguardOptions,
+                            buildDirectory = this@applyAndroidApp.layout.buildDirectory
+                        )
+                    }
+                }
             }
         }
     }
@@ -40,17 +61,32 @@ internal fun Project.applyAndroidLibrary(androidLibraryOptions: AndroidLibraryOp
 
     extensions.configure<LibraryExtension> {
         buildTypes {
-            release {
-                isMinifyEnabled = false
-
-                androidLibraryOptions.proguardOptions.applyWithOptimizedVersion
-                    .takeIf { it }
-                    ?.let {
-                        consumerProguardFiles(
-                            getDefaultProguardFile("proguard-android-optimize.txt"),
-                            androidLibraryOptions.proguardOptions.fileName
+            androidLibraryOptions.buildTypes.forEach { androidBuildType ->
+                when (androidBuildType) {
+                    DebugBuildType -> debug {
+                        applyFrom(
+                            androidBuildType = androidBuildType,
+                            proguardOptions = androidLibraryOptions.proguardOptions,
+                            buildDirectory = this@applyAndroidLibrary.layout.buildDirectory
                         )
-                    } ?: consumerProguardFiles(androidLibraryOptions.proguardOptions.fileName)
+                    }
+
+                    ReleaseBuildType -> release {
+                        applyFrom(
+                            androidBuildType = androidBuildType,
+                            proguardOptions = androidLibraryOptions.proguardOptions,
+                            buildDirectory = this@applyAndroidLibrary.layout.buildDirectory
+                        )
+                    }
+
+                    else -> getByName(androidBuildType.name) {
+                        applyFrom(
+                            androidBuildType = androidBuildType,
+                            proguardOptions = androidLibraryOptions.proguardOptions,
+                            buildDirectory = this@applyAndroidLibrary.layout.buildDirectory
+                        )
+                    }
+                }
             }
         }
     }
@@ -95,6 +131,44 @@ private fun Project.applyAndroidCommon(
             }
         }
     }
+
+private fun ApplicationBuildType.applyFrom(
+    androidBuildType: AndroidBuildType,
+    proguardOptions: ProguardOptions,
+    buildDirectory: DirectoryProperty,
+) {
+    isDebuggable = androidBuildType.isDebuggable
+    isMinifyEnabled = androidBuildType.isMinifyEnabled
+    isShrinkResources = androidBuildType.shrinkResources
+    multiDexEnabled = androidBuildType.multidex
+    versionNameSuffix = androidBuildType.versionNameSuffix
+
+    proguardOptions.applyWithOptimizedVersion.takeIf { it }
+        ?.let {
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt", buildDirectory),
+                proguardOptions.fileName
+            )
+        } ?: proguardFiles(proguardOptions.fileName)
+}
+
+private fun LibraryBuildType.applyFrom(
+    androidBuildType: AndroidBuildType,
+    proguardOptions: ProguardOptions,
+    buildDirectory: DirectoryProperty,
+) {
+    isMinifyEnabled = androidBuildType.isMinifyEnabled
+    multiDexEnabled = androidBuildType.multidex
+
+    proguardOptions.applyWithOptimizedVersion
+        .takeIf { it }
+        ?.let {
+            consumerProguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt", buildDirectory),
+                proguardOptions.fileName
+            )
+        } ?: consumerProguardFiles(proguardOptions.fileName)
+}
 
 private val Project.commonExtension: CommonExtension<*, *, *, *, *>
     get() = extensions.findByType<ApplicationExtension>()

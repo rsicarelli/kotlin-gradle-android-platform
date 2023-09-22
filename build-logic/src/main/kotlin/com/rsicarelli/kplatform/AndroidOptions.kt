@@ -1,3 +1,5 @@
+@file:Suppress("MemberVisibilityCanBePrivate")
+
 package com.rsicarelli.kplatform
 
 import com.rsicarelli.kplatform.AndroidOptions.AndroidAppOptions
@@ -13,6 +15,7 @@ sealed class AndroidOptions(
     open val composeOptions: ComposeOptions,
     open val packagingOptions: PackagingOptions,
     open val proguardOptions: ProguardOptions,
+    open val buildTypes: List<AndroidBuildType>,
 ) {
 
     data class AndroidAppOptions(
@@ -28,6 +31,7 @@ sealed class AndroidOptions(
         override val javaVersion: JavaVersion,
         override val composeOptions: ComposeOptions,
         override val packagingOptions: PackagingOptions,
+        override val buildTypes: List<AndroidBuildType>,
     ) : AndroidOptions(
         namespace = namespace,
         compileSdk = compileSdk,
@@ -36,7 +40,8 @@ sealed class AndroidOptions(
         javaVersion = javaVersion,
         composeOptions = composeOptions,
         packagingOptions = packagingOptions,
-        proguardOptions = proguardOptions
+        proguardOptions = proguardOptions,
+        buildTypes = buildTypes
     )
 
     data class AndroidLibraryOptions(
@@ -48,6 +53,7 @@ sealed class AndroidOptions(
         override val javaVersion: JavaVersion,
         override val composeOptions: ComposeOptions,
         override val packagingOptions: PackagingOptions,
+        override val buildTypes: List<AndroidBuildType>,
     ) : AndroidOptions(
         namespace = namespace,
         compileSdk = compileSdk,
@@ -56,7 +62,8 @@ sealed class AndroidOptions(
         javaVersion = javaVersion,
         composeOptions = composeOptions,
         packagingOptions = packagingOptions,
-        proguardOptions = proguardOptions
+        proguardOptions = proguardOptions,
+        buildTypes = buildTypes
     )
 }
 
@@ -73,6 +80,36 @@ data class PackagingOptions(
     val excludes: String = "/META-INF/{AL2.0,LGPL2.1}",
 )
 
+interface AndroidBuildType {
+
+    val name: String
+    val isMinifyEnabled: Boolean
+    val shrinkResources: Boolean
+    val versionNameSuffix: String?
+    val isDebuggable: Boolean
+    val multidex: Boolean
+}
+
+object ReleaseBuildType : AndroidBuildType {
+
+    override val name: String = "release"
+    override val isMinifyEnabled: Boolean = true
+    override val shrinkResources: Boolean = true
+    override val versionNameSuffix: String? = null
+    override val isDebuggable: Boolean = false
+    override val multidex: Boolean = false
+}
+
+object DebugBuildType : AndroidBuildType {
+
+    override val name: String = "debug"
+    override val isMinifyEnabled: Boolean = false
+    override val shrinkResources: Boolean = false
+    override val versionNameSuffix: String = "debug"
+    override val isDebuggable: Boolean = true
+    override val multidex: Boolean = false
+}
+
 abstract class AndroidOptionsBuilder {
 
     var namespace: String = "com.rsicarelli.kplatform"
@@ -82,6 +119,7 @@ abstract class AndroidOptionsBuilder {
     var javaVersion: JavaVersion = JavaVersion.VERSION_17
     var composeOptions: ComposeOptions = ComposeOptions()
     var packagingOptions: PackagingOptions = PackagingOptions()
+    var buildTypes: List<AndroidBuildType> = listOf(ReleaseBuildType, DebugBuildType)
 
     abstract fun build(): AndroidOptions
 }
@@ -111,6 +149,7 @@ class AndroidAppOptionsBuilder : AndroidOptionsBuilder() {
         javaVersion = javaVersion,
         composeOptions = composeOptions,
         packagingOptions = packagingOptions,
+        buildTypes = buildTypes
     )
 }
 
@@ -131,6 +170,7 @@ class AndroidLibraryOptionsBuilder : AndroidOptionsBuilder() {
         javaVersion = javaVersion,
         composeOptions = composeOptions,
         packagingOptions = packagingOptions,
+        buildTypes = buildTypes
     )
 }
 
