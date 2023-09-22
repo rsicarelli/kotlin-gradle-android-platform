@@ -7,7 +7,7 @@ plugins {
 }
 
 androidLibrary {
-    buildFeaturesConfig {
+    buildFeatures {
         generateAndroidResources = true
     }
 }

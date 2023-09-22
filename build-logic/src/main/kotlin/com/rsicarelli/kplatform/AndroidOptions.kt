@@ -4,7 +4,7 @@ package com.rsicarelli.kplatform
 
 import com.rsicarelli.kplatform.AndroidOptions.AndroidAppOptions
 import com.rsicarelli.kplatform.AndroidOptions.AndroidLibraryOptions
-import com.rsicarelli.kplatform.AndroidOptions.AndroidLibraryOptions.BuildFeaturesConfig
+import com.rsicarelli.kplatform.AndroidOptions.AndroidLibraryOptions.BuildFeatures
 import org.gradle.api.JavaVersion
 
 sealed class AndroidOptions(
@@ -46,7 +46,7 @@ sealed class AndroidOptions(
     )
 
     data class AndroidLibraryOptions(
-        val buildFeaturesConfig: BuildFeaturesConfig,
+        val buildFeatures: BuildFeatures,
         override val proguardOptions: ProguardOptions,
         override val namespace: String,
         override val compileSdk: Int,
@@ -68,7 +68,7 @@ sealed class AndroidOptions(
         buildTypes = buildTypes
     ) {
 
-        data class BuildFeaturesConfig(
+        data class BuildFeatures(
             val generateAndroidResources: Boolean = false,
             val generateResValues: Boolean = false,
             val generateBuildConfig: Boolean = false,
@@ -165,14 +165,14 @@ class AndroidAppOptionsBuilder : AndroidOptionsBuilder() {
 class AndroidLibraryOptionsBuilder : AndroidOptionsBuilder() {
 
     var proguardOptionsBuilder = ProguardOptionsBuilder("consumer-proguard-rules.pro")
-    var buildFeaturesConfigBuilder = BuildFeaturesBuilder()
+    var buildFeaturesBuilder = BuildFeaturesBuilder()
 
     fun proguardOptions(block: ProguardOptionsBuilder.() -> Unit) {
         proguardOptionsBuilder.apply(block)
     }
 
-    fun buildFeaturesConfig(block: BuildFeaturesBuilder.() -> Unit) {
-        buildFeaturesConfigBuilder.apply(block)
+    fun buildFeatures(block: BuildFeaturesBuilder.() -> Unit) {
+        buildFeaturesBuilder.apply(block)
     }
 
     override fun build(): AndroidLibraryOptions = AndroidLibraryOptions(
@@ -185,7 +185,7 @@ class AndroidLibraryOptionsBuilder : AndroidOptionsBuilder() {
         composeOptions = composeOptions,
         packagingOptions = packagingOptions,
         buildTypes = buildTypes,
-        buildFeaturesConfig = buildFeaturesConfigBuilder.build()
+        buildFeatures = buildFeaturesBuilder.build()
     )
 }
 
@@ -206,7 +206,7 @@ class BuildFeaturesBuilder() {
     var generateResValues: Boolean = false
     var generateBuildConfig: Boolean = false
 
-    fun build(): BuildFeaturesConfig = BuildFeaturesConfig(
+    fun build(): BuildFeatures = BuildFeatures(
         generateAndroidResources = generateAndroidResources,
         generateResValues = generateResValues,
         generateBuildConfig = generateBuildConfig
