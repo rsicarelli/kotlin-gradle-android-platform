@@ -2,12 +2,27 @@
 
 package com.rsicarelli.kplatform.options
 
+/**
+ * Alias for constructing Spotless options.
+ */
 typealias SpotlessBuilder = SpotlessOptionsBuilder.() -> Unit
 
+/**
+ * Represents a set of options for configuring the Spotless code formatter.
+ *
+ * @property fileRules A list of rules for how files should be formatted by Spotless.
+ */
 data class SpotlessOptions(
     val fileRules: List<SpotlessFileRule> = listOf(SpotlessKtRule, SpotlessXmlRule),
 )
 
+/**
+ * Interface defining a rule for file formatting using Spotless.
+ *
+ * @property fileExtension The file extension that the rule applies to.
+ * @property targets Patterns for the files that should be formatted.
+ * @property excludes Patterns for the files that should be excluded from formatting.
+ */
 interface SpotlessFileRule {
 
     val fileExtension: String
@@ -15,6 +30,9 @@ interface SpotlessFileRule {
     val excludes: List<String>
 }
 
+/**
+ * A [SpotlessFileRule] for formatting Kotlin Script files.
+ */
 object SpotlessKtRule : SpotlessFileRule {
 
     override val fileExtension: String = "kts"
@@ -22,6 +40,9 @@ object SpotlessKtRule : SpotlessFileRule {
     override val excludes: List<String> = listOf("**/build/**/*.kts")
 }
 
+/**
+ * A [SpotlessFileRule] for formatting XML files.
+ */
 object SpotlessXmlRule : SpotlessFileRule {
 
     override val fileExtension: String = "xml"
@@ -29,6 +50,11 @@ object SpotlessXmlRule : SpotlessFileRule {
     override val excludes: List<String> = listOf("**/build/**/*.xml")
 }
 
+/**
+ * Builder class to construct [SpotlessOptions].
+ *
+ * Offers a fluent API to configure various Spotless settings.
+ */
 class SpotlessOptionsBuilder {
 
     var fileRules: List<SpotlessFileRule> = listOf(SpotlessKtRule, SpotlessXmlRule)

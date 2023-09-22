@@ -2,6 +2,20 @@
 
 package com.rsicarelli.kplatform.options
 
+/**
+ * Alias for constructing Detekt options.
+ */
+typealias DetektBuilder = DetektOptionsBuilder.() -> Unit
+
+/**
+ * Represents a set of options for configuring the Detekt static code analysis tool.
+ *
+ * @property parallel Flag indicating if the analysis should run in parallel.
+ * @property buildUponDefaultConfig Flag indicating if Detekt should build upon its default configurations.
+ * @property configFileNames List of configuration file names for Detekt.
+ * @property includes List of patterns for the files that should be included in the analysis.
+ * @property excludes List of patterns for the files that should be excluded from the analysis.
+ */
 data class DetektOptions(
     val parallel: Boolean,
     val buildUponDefaultConfig: Boolean,
@@ -10,8 +24,11 @@ data class DetektOptions(
     val excludes: List<String>
 )
 
-typealias DetektBuilder = DetektOptionsBuilder.() -> Unit
-
+/**
+ * Builder class to construct [DetektOptions].
+ *
+ * Offers a fluent API to configure various Detekt settings.
+ */
 class DetektOptionsBuilder {
 
     var parallel: Boolean = true
