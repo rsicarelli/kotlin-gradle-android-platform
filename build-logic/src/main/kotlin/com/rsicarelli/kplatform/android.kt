@@ -9,7 +9,6 @@ import com.android.build.gradle.ProguardFiles.getDefaultProguardFile
 import com.rsicarelli.kplatform.AndroidOptions.AndroidAppOptions
 import com.rsicarelli.kplatform.AndroidOptions.AndroidLibraryOptions
 import org.gradle.api.Project
-import org.gradle.api.file.DirectoryProperty
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.findByType
 
@@ -22,37 +21,15 @@ internal fun Project.applyAndroidApp(androidAppOptions: AndroidAppOptions) {
             targetSdk = androidAppOptions.targetSdk
             versionCode = androidAppOptions.versionCode
             versionName = androidAppOptions.versionName
+
+            setProguardFiles(
+                config = this,
+                proguardOptions = androidAppOptions.proguardOptions,
+                consume = { proguardFiles(*it) }
+            )
         }
 
-        buildTypes {
-            androidAppOptions.buildTypes.forEach { androidBuildType ->
-                when (androidBuildType) {
-                    DebugBuildType -> debug {
-                        applyFrom(
-                            androidBuildType = androidBuildType,
-                            proguardOptions = androidAppOptions.proguardOptions,
-                            buildDirectory = this@applyAndroidApp.layout.buildDirectory
-                        )
-                    }
-
-                    ReleaseBuildType -> release {
-                        applyFrom(
-                            androidBuildType = androidBuildType,
-                            proguardOptions = androidAppOptions.proguardOptions,
-                            buildDirectory = this@applyAndroidApp.layout.buildDirectory
-                        )
-                    }
-
-                    else -> getByName(androidBuildType.name) {
-                        applyFrom(
-                            androidBuildType = androidBuildType,
-                            proguardOptions = androidAppOptions.proguardOptions,
-                            buildDirectory = this@applyAndroidApp.layout.buildDirectory
-                        )
-                    }
-                }
-            }
-        }
+        setAppBuildTypes(androidAppOptions)
     }
 }
 
@@ -60,41 +37,19 @@ internal fun Project.applyAndroidLibrary(androidLibraryOptions: AndroidLibraryOp
     applyAndroidCommon(androidLibraryOptions)
 
     extensions.configure<LibraryExtension> {
-        buildTypes {
-            androidLibraryOptions.buildTypes.forEach { androidBuildType ->
-                when (androidBuildType) {
-                    DebugBuildType -> debug {
-                        applyFrom(
-                            androidBuildType = androidBuildType,
-                            proguardOptions = androidLibraryOptions.proguardOptions,
-                            buildDirectory = this@applyAndroidLibrary.layout.buildDirectory
-                        )
-                    }
-
-                    ReleaseBuildType -> release {
-                        applyFrom(
-                            androidBuildType = androidBuildType,
-                            proguardOptions = androidLibraryOptions.proguardOptions,
-                            buildDirectory = this@applyAndroidLibrary.layout.buildDirectory
-                        )
-                    }
-
-                    else -> getByName(androidBuildType.name) {
-                        applyFrom(
-                            androidBuildType = androidBuildType,
-                            proguardOptions = androidLibraryOptions.proguardOptions,
-                            buildDirectory = this@applyAndroidLibrary.layout.buildDirectory
-                        )
-                    }
-                }
-            }
+        defaultConfig {
+            setProguardFiles(
+                config = this,
+                proguardOptions = androidLibraryOptions.proguardOptions,
+                consume = { consumerProguardFiles(*it) }
+            )
         }
+
+        setLibraryBuildTypes(androidLibraryOptions)
     }
 }
 
-private fun Project.applyAndroidCommon(
-    androidOptions: AndroidOptions,
-) =
+private fun Project.applyAndroidCommon(androidOptions: AndroidOptions) =
     with(commonExtension) {
         namespace = androidOptions.namespace
         compileSdk = androidOptions.compileSdk
@@ -132,45 +87,61 @@ private fun Project.applyAndroidCommon(
         }
     }
 
-private fun ApplicationBuildType.applyFrom(
-    androidBuildType: AndroidBuildType,
-    proguardOptions: ProguardOptions,
-    buildDirectory: DirectoryProperty,
-) {
-    isDebuggable = androidBuildType.isDebuggable
-    isMinifyEnabled = androidBuildType.isMinifyEnabled
-    isShrinkResources = androidBuildType.shrinkResources
-    multiDexEnabled = androidBuildType.multidex
-    versionNameSuffix = androidBuildType.versionNameSuffix
+private fun ApplicationExtension.setAppBuildTypes(options: AndroidAppOptions) {
+    fun ApplicationBuildType.applyFrom(androidBuildType: AndroidBuildType) {
+        isDebuggable = androidBuildType.isDebuggable
+        isMinifyEnabled = androidBuildType.isMinifyEnabled
+        isShrinkResources = androidBuildType.shrinkResources
+        multiDexEnabled = androidBuildType.multidex
+        versionNameSuffix = androidBuildType.versionNameSuffix
+    }
 
-    proguardOptions.applyWithOptimizedVersion.takeIf { it }
-        ?.let {
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt", buildDirectory),
-                proguardOptions.fileName
-            )
-        } ?: proguardFiles(proguardOptions.fileName)
+    buildTypes {
+        options.buildTypes.forEach { androidBuildType ->
+            when (androidBuildType) {
+                DebugBuildType -> debug { applyFrom(androidBuildType) }
+                ReleaseBuildType -> release { applyFrom(androidBuildType) }
+                else -> create(androidBuildType.name) { applyFrom(androidBuildType) }
+            }
+        }
+    }
 }
 
-private fun LibraryBuildType.applyFrom(
-    androidBuildType: AndroidBuildType,
-    proguardOptions: ProguardOptions,
-    buildDirectory: DirectoryProperty,
-) {
-    isMinifyEnabled = androidBuildType.isMinifyEnabled
-    multiDexEnabled = androidBuildType.multidex
+private fun LibraryExtension.setLibraryBuildTypes(options: AndroidLibraryOptions) {
+    fun LibraryBuildType.applyFrom(androidBuildType: AndroidBuildType) {
+        isMinifyEnabled = androidBuildType.isMinifyEnabled
+        multiDexEnabled = androidBuildType.multidex
+    }
 
-    proguardOptions.applyWithOptimizedVersion
-        .takeIf { it }
-        ?.let {
-            consumerProguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt", buildDirectory),
+    buildTypes {
+        options.buildTypes.forEach { androidBuildType ->
+            when (androidBuildType) {
+                DebugBuildType -> debug { applyFrom(androidBuildType) }
+                ReleaseBuildType -> release { applyFrom(androidBuildType) }
+                else -> create(androidBuildType.name) { applyFrom(androidBuildType) }
+            }
+        }
+    }
+}
+
+private fun <T> Project.setProguardFiles(
+    config: T,
+    proguardOptions: ProguardOptions,
+    consume: T.(Array<Any>) -> Unit,
+) {
+    if (proguardOptions.applyWithOptimizedVersion) {
+        config.consume(
+            arrayOf(
+                getDefaultProguardFile("proguard-android-optimize.txt", layout.buildDirectory),
                 proguardOptions.fileName
             )
-        } ?: consumerProguardFiles(proguardOptions.fileName)
+        )
+    } else {
+        config.consume(arrayOf(proguardOptions.fileName))
+    }
 }
 
 private val Project.commonExtension: CommonExtension<*, *, *, *, *>
     get() = extensions.findByType<ApplicationExtension>()
         ?: extensions.findByType<LibraryExtension>()
-        ?: error("Android plugin not applied")
+        ?: error("Android Application or Library plugin must be applied before configuring it.")
