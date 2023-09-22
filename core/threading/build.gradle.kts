@@ -1,20 +1,11 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import com.rsicarelli.kplatform.jvmLibrary
 
 plugins {
-    id("java-library")
     kotlin("jvm")
+    id(libs.plugins.rsicarelli.kplatform.get().pluginId)
 }
 
-extensions.configure<JavaPluginExtension> {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
-}
-
-tasks.withType<KotlinCompile>().configureEach {
-    kotlinOptions {
-        jvmTarget = "17"
-    }
-}
+jvmLibrary()
 
 dependencies {
     api(libs.kotlinx.coroutines.core)

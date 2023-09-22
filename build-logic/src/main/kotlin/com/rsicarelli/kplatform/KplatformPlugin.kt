@@ -18,3 +18,5 @@ fun Project.androidApp(builderAction: AndroidAppOptionsBuilder.() -> Unit = { })
 fun Project.androidLibrary(builderAction: AndroidLibraryOptionsBuilder.() -> Unit = { }) = applyAndroidLibrary(
     AndroidLibraryOptionsBuilder().apply(builderAction).build()
 )
+
+fun Project.jvmLibrary() = applyJvmLibrary()
