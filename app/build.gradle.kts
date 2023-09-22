@@ -6,7 +6,10 @@ plugins {
     id(libs.plugins.rsicarelli.kplatform.get().pluginId)
 }
 
-androidApp()
+androidApp {
+    versionCode = 1
+    versionName = "1.0.0"
+}
 
 dependencies {
     implementation(libs.androidx.core.ktx)
