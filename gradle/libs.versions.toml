@@ -6,6 +6,7 @@ androidxLifecycleRuntimeKtx = "2.6.2"
 androidxComposeActivity = "1.7.2"
 androidBuildTools = "8.1.1"
 detekt = "1.23.1"
+detektCompose = "0.2.3"
 kotlin = "1.9.10"
 kotlinCoroutines = "1.7.3"
 
@@ -25,6 +26,10 @@ gradlePlugin-android = { module = "com.android.tools.build:gradle", version.ref 
 gradlePlugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 gradlePlugin-detekt = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
 
+detektRules-compose = { module = "io.nlopez.compose.rules:detekt", version.ref = "detektCompose" }
+detektRules-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
+detektRules-libraries = { module = "io.gitlab.arturbosch.detekt:detekt-rules-libraries", version.ref = "detekt" }
+
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinCoroutines" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinCoroutines" }
 
@@ -32,4 +37,5 @@ kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-t
 android-application = { id = "com.android.application", version.ref = "androidBuildTools" }
 android-library = { id = "com.android.library", version.ref = "androidBuildTools" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+arturbosch-detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 rsicarelli-kplatform = { id = "com.rsicarelli.kplatform" }
