@@ -28,6 +28,5 @@ fun HomeScreen() {
                 DetailsScreen()
             }
         )
-
     }
 }
