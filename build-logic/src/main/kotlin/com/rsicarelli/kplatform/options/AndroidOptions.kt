@@ -7,9 +7,25 @@ import com.rsicarelli.kplatform.options.AndroidOptions.AndroidLibraryOptions
 import com.rsicarelli.kplatform.options.AndroidOptions.AndroidLibraryOptions.BuildFeatures
 import org.gradle.api.JavaVersion
 
+/**
+ * Aliases for constructing Android application and library options.
+ */
 typealias AndroidAppBuilder = AndroidAppOptionsBuilder.() -> Unit
 typealias AndroidLibraryBuilder = AndroidLibraryOptionsBuilder.() -> Unit
 
+/**
+ * Represents a set of common options to be applied to an Android project.
+ *
+ * @property namespace The project's package namespace.
+ * @property compileSdk The compile SDK version.
+ * @property minSdk The minimum SDK version.
+ * @property useVectorDrawables Flag indicating whether vector drawables are used.
+ * @property javaVersion The Java version.
+ * @property composeOptions Configuration for Android Jetpack Compose.
+ * @property packagingOptions Configuration for packaging options.
+ * @property proguardOptions Configuration for Proguard.
+ * @property buildTypes List of build types for the project (e.g., debug, release).
+ */
 internal sealed class AndroidOptions(
     open val namespace: String,
     open val compileSdk: Int,
@@ -22,6 +38,15 @@ internal sealed class AndroidOptions(
     open val buildTypes: List<AndroidBuildType>
 ) {
 
+    /**
+     * Represents the options specific to an Android application.
+     *
+     * @property applicationId The application's ID.
+     * @property targetSdk The target SDK version.
+     * @property versionCode The version code for the application.
+     * @property versionName The version name for the application.
+     * @property generateBuildConfig Flag indicating whether to generate a BuildConfig file.
+     */
     internal data class AndroidAppOptions(
         val applicationId: String,
         val targetSdk: Int,
@@ -49,6 +74,11 @@ internal sealed class AndroidOptions(
         buildTypes = buildTypes
     )
 
+    /**
+     * Represents the options specific to an Android library.
+     *
+     * @property buildFeatures Configuration for specific Android build features.
+     */
     internal data class AndroidLibraryOptions(
         val buildFeatures: BuildFeatures,
         override val proguardOptions: ProguardOptions,
@@ -72,6 +102,13 @@ internal sealed class AndroidOptions(
         buildTypes = buildTypes
     ) {
 
+        /**
+         * Represents build-specific features for an Android library.
+         *
+         * @property generateAndroidResources Flag indicating whether Android resources are generated.
+         * @property generateResValues Flag indicating whether resource values are generated.
+         * @property generateBuildConfig Flag indicating whether a BuildConfig file is generated.
+         */
         internal data class BuildFeatures(
             val generateAndroidResources: Boolean = false,
             val generateResValues: Boolean = false,
@@ -123,6 +160,11 @@ object DebugBuildType : AndroidBuildType {
     override val multidex: Boolean = false
 }
 
+/**
+ * Base class to construct Android options.
+ *
+ * Provides a foundation for creating Android configurations with default values.
+ */
 abstract class AndroidOptionsBuilder {
 
     var namespace: String = "com.rsicarelli.kplatform"
@@ -137,6 +179,9 @@ abstract class AndroidOptionsBuilder {
     internal abstract fun build(): AndroidOptions
 }
 
+/**
+ * Builder class to construct options specific to an Android application.
+ */
 class AndroidAppOptionsBuilder : AndroidOptionsBuilder() {
 
     var applicationId: String = "com.rsicarelli.kplatform"
@@ -168,6 +213,9 @@ class AndroidAppOptionsBuilder : AndroidOptionsBuilder() {
     )
 }
 
+/**
+ * Builder class to construct options specific to an Android library.
+ */
 class AndroidLibraryOptionsBuilder : AndroidOptionsBuilder() {
 
     var proguardOptionsBuilder = ProguardOptionsBuilder("consumer-proguard-rules.pro")
@@ -195,6 +243,12 @@ class AndroidLibraryOptionsBuilder : AndroidOptionsBuilder() {
     )
 }
 
+/**
+ * Builder class to construct Proguard options.
+ *
+ * @property fileName Name of the Proguard rules file.
+ * @property applyWithOptimizedVersion Flag indicating whether to apply optimized Proguard rules.
+ */
 class ProguardOptionsBuilder(defaultFileName: String) {
 
     var fileName: String = defaultFileName
@@ -206,6 +260,9 @@ class ProguardOptionsBuilder(defaultFileName: String) {
     )
 }
 
+/**
+ * Builder class to construct specific Android build features.
+ */
 class BuildFeaturesBuilder {
 
     var generateAndroidResources: Boolean = false
