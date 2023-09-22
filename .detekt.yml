@@ -469,8 +469,8 @@ style:
     active: false
   MagicNumber:
     active: false
-  MandatoryBracesIfStatements:
-    active: false
+  BracesOnIfStatements:
+    active: always
   MandatoryBracesLoops:
     active: false
   MaxChainedCallsOnSameLine:
@@ -498,7 +498,7 @@ style:
     active: false
   OptionalUnit:
     active: false
-  OptionalWhenBraces:
+  BracesOnWhenStatements:
     active: false
   PreferToOverPairSyntax:
     active: false

@@ -15,25 +15,32 @@ internal fun Project.applyDetekt(
 ) {
     check(rootProject == this) { "Must be called on a root project" }
 
-    pluginManager.apply("io.gitlab.arturbosch.detekt")
+    val klintVersion = libs.version("detekt")
+    val dependency = libs.findLibrary("detektRules-compose").get().get()
+    val dependency1 = libs.findLibrary("detektRules-formatting").get().get()
+    val dependency2 = libs.findLibrary("detektRules-libraries").get().get()
 
-    extensions.configure<DetektExtension> {
-        parallel = detektOptions.parallel
-        toolVersion = libs.version("detekt")
-        buildUponDefaultConfig = detektOptions.buildUponDefaultConfig
-        config.setFrom(detektOptions.configFileNames.map { "$projectDir/${it}" })
-    }
+    subprojects {
+        pluginManager.apply("io.gitlab.arturbosch.detekt")
+        extensions.configure<DetektExtension> {
+            parallel = detektOptions.parallel
+            toolVersion = klintVersion
+            buildUponDefaultConfig = detektOptions.buildUponDefaultConfig
+            config.setFrom(detektOptions.configFileNames.map { "$rootDir/${it}" })
+        }
 
-    tasks.withType<Detekt> {
-        setSource(files(projectDir))
-        include(detektOptions.includes)
-        exclude(detektOptions.excludes)
-    }
+        tasks.withType<Detekt> {
+            setSource(files(projectDir))
+            include(detektOptions.includes)
+            exclude(detektOptions.excludes)
+        }
 
-    dependencies {
-        detektPlugins(libs.findLibrary("detektRules-compose").get().get())
-        detektPlugins(libs.findLibrary("detektRules-formatting").get().get())
-        detektPlugins(libs.findLibrary("detektRules-libraries").get().get())
+        dependencies {
+
+            detektPlugins(dependency)
+            detektPlugins(dependency1)
+            detektPlugins(dependency2)
+        }
     }
 }
 
