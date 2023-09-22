@@ -3,6 +3,8 @@
  */
 package com.rsicarelli.kplatform
 
+import com.rsicarelli.kplatform.options.AndroidAppOptionsBuilder
+import com.rsicarelli.kplatform.options.AndroidLibraryOptionsBuilder
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 

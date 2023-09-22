@@ -1,10 +1,10 @@
 @file:Suppress("MemberVisibilityCanBePrivate")
 
-package com.rsicarelli.kplatform
+package com.rsicarelli.kplatform.options
 
-import com.rsicarelli.kplatform.AndroidOptions.AndroidAppOptions
-import com.rsicarelli.kplatform.AndroidOptions.AndroidLibraryOptions
-import com.rsicarelli.kplatform.AndroidOptions.AndroidLibraryOptions.BuildFeatures
+import com.rsicarelli.kplatform.options.AndroidOptions.AndroidAppOptions
+import com.rsicarelli.kplatform.options.AndroidOptions.AndroidLibraryOptions
+import com.rsicarelli.kplatform.options.AndroidOptions.AndroidLibraryOptions.BuildFeatures
 import org.gradle.api.JavaVersion
 
 sealed class AndroidOptions(

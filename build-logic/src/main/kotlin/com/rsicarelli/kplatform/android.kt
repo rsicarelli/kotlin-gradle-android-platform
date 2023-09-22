@@ -6,8 +6,14 @@ import com.android.build.api.dsl.CommonExtension
 import com.android.build.api.dsl.LibraryBuildType
 import com.android.build.api.dsl.LibraryExtension
 import com.android.build.gradle.ProguardFiles.getDefaultProguardFile
-import com.rsicarelli.kplatform.AndroidOptions.AndroidAppOptions
-import com.rsicarelli.kplatform.AndroidOptions.AndroidLibraryOptions
+import com.rsicarelli.kplatform.options.AndroidBuildType
+import com.rsicarelli.kplatform.options.AndroidOptions
+import com.rsicarelli.kplatform.options.AndroidOptions.AndroidAppOptions
+import com.rsicarelli.kplatform.options.AndroidOptions.AndroidLibraryOptions
+import com.rsicarelli.kplatform.options.ComposeOptions
+import com.rsicarelli.kplatform.options.DebugBuildType
+import com.rsicarelli.kplatform.options.ProguardOptions
+import com.rsicarelli.kplatform.options.ReleaseBuildType
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.findByType
