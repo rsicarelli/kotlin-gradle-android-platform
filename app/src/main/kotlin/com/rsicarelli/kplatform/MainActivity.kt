@@ -9,7 +9,6 @@ import com.rsicarelli.kplatform.ui.theme.KplatformTheme
 class MainActivity : ComponentActivity() {
 
     init {
-        //test rather BuildConfig is generated
         println("Hello from debug ${BuildConfig.DEBUG}")
     }
 

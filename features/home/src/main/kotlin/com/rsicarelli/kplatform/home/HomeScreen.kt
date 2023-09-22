@@ -13,7 +13,9 @@ import androidx.compose.ui.unit.dp
 import com.rsicarelli.kplatform.features.details.DetailsScreen
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(
+    modifier: Modifier = Modifier,
+) {
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
