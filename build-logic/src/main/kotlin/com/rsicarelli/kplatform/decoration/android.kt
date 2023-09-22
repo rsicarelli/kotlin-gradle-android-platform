@@ -1,4 +1,4 @@
-package com.rsicarelli.kplatform
+package com.rsicarelli.kplatform.decoration
 
 import com.android.build.api.dsl.ApplicationBuildType
 import com.android.build.api.dsl.ApplicationExtension

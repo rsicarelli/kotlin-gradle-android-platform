@@ -1,4 +1,4 @@
-package com.rsicarelli.kplatform
+package com.rsicarelli.kplatform.decoration
 
 import com.rsicarelli.kplatform.options.CompilationOptions
 import org.gradle.api.JavaVersion
