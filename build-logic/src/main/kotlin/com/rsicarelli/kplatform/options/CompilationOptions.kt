@@ -14,7 +14,8 @@ data class CompilationOptions(
         get() = featureOptIns.map { "-opt-in=${it.flag}" }
 
     enum class FeatureOptIn(val flag: String) {
-        ExperimentalMaterial3("androidx.compose.material3.ExperimentalMaterial3Api")
+        ExperimentalMaterial3("androidx.compose.material3.ExperimentalMaterial3Api"),
+        ExperimentalCoroutinesApi(flag = "kotlinx.coroutines.ExperimentalCoroutinesApi"),
     }
 }
 
