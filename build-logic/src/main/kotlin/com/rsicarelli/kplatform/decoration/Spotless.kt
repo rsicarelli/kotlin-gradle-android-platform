@@ -11,25 +11,32 @@ import org.gradle.kotlin.dsl.withType
 data class SpotlessOptions(
     val hookOnBuild: Boolean = false,
     val kotlinRules: SpotlessKotlinRules = SpotlessKotlinRules(),
-    val kotlinFileRules: SpotlessKotlinFileRules = SpotlessKotlinFileRules(),
-    val xmlRules: SpotlessXmlRules = SpotlessXmlRules()
+    val fileRules: List<SpotlessFileRule> = listOf(SpotlessKtRule, SpotlessXmlRule),
 )
+
+interface SpotlessFileRule {
+
+    val fileExtension: String
+    val targets: List<String>
+    val excludes: List<String>
+}
+
+object SpotlessKtRule : SpotlessFileRule {
+
+    override val fileExtension: String = "kts"
+    override val targets: List<String> = listOf("**/*.kts")
+    override val excludes: List<String> = listOf("**/build/**/*.kts")
+}
+
+object SpotlessXmlRule : SpotlessFileRule {
+
+    override val fileExtension: String = "xml"
+    override val targets: List<String> = listOf("**/*.xml")
+    override val excludes: List<String> = listOf("**/build/**/*.xml")
+}
 
 data class SpotlessKotlinRules(
-    val targets: List<String> = listOf("**/*.kt"),
-    val excludes: List<String> = listOf("**/build/**/*.kt", "**/test/**", "**/androidTest/**", "**/*.Test.kt"),
-    val userData: HashMap<String, String> = hashMapOf("android" to "true")
-)
-
-data class SpotlessKotlinFileRules(
-    val fileExtension: String = "kts",
-    val targets: List<String> = listOf("**/*.kts"),
-    val excludes: List<String> = listOf("**/build/**/*.kts")
-)
-
-data class SpotlessXmlRules(
-    val targets: List<String> = listOf("**/*.xml"),
-    val excludes: List<String> = listOf("**/build/**/*.xml")
+    val target: String = "src/**/*.kt",
 )
 
 internal fun Project.applySpotless(spotlessConfig: SpotlessOptions) {
@@ -39,6 +46,16 @@ internal fun Project.applySpotless(spotlessConfig: SpotlessOptions) {
         applySpotlessForBuildTask()
     }
 
+    configureSpotlessPlugin(spotlessConfig, project)
+    rootProject.subprojects {
+        configureSpotlessPlugin(spotlessConfig, project)
+    }
+}
+
+private fun Project.configureSpotlessPlugin(
+    spotlessConfig: SpotlessOptions,
+    project: Project
+) {
     apply<SpotlessPlugin>()
 
     extensions.configure<SpotlessExtension> {
@@ -47,26 +64,7 @@ internal fun Project.applySpotless(spotlessConfig: SpotlessOptions) {
             project = project
         )
 
-        setupKotlinDsl(spotlessConfig.kotlinFileRules)
-
-        setupXml(spotlessConfig.xmlRules)
-    }
-
-    rootProject.apply {
-        subprojects {
-            apply<SpotlessPlugin>()
-
-            extensions.configure<SpotlessExtension> {
-                setupKotlin(
-                    config = spotlessConfig.kotlinRules,
-                    project = project
-                )
-
-                setupKotlinDsl(spotlessConfig.kotlinFileRules)
-
-                setupXml(spotlessConfig.xmlRules)
-            }
-        }
+        applyFileRules(spotlessConfig.fileRules)
     }
 }
 
@@ -78,27 +76,18 @@ private fun Project.applySpotlessForBuildTask() {
 
 private fun SpotlessExtension.setupKotlin(config: SpotlessKotlinRules, project: Project) {
     kotlin {
-        target(config.targets)
-        targetExclude(config.excludes)
-        ktlint()
-            .userData(config.userData)
-            .setEditorConfigPath("${project.rootDir}/.editorconfig")
-        endWithNewline()
+        target(config.target)
+        ktlint().setEditorConfigPath("${project.rootDir}/.editorconfig")
     }
 }
 
-private fun SpotlessExtension.setupKotlinDsl(config: SpotlessKotlinFileRules) {
-    format(config.fileExtension) {
-        target(config.targets)
-        targetExclude(config.excludes)
-    }
-}
-
-private fun SpotlessExtension.setupXml(config: SpotlessXmlRules?) {
-    config?.let {
-        format("xml") {
-            target(config.targets)
-            targetExclude(config.excludes)
+private fun SpotlessExtension.applyFileRules(fileRules: List<SpotlessFileRule>) {
+    fileRules.forEach { spotlessFileRule ->
+        with(spotlessFileRule) {
+            format(fileExtension) {
+                target(targets)
+                targetExclude(excludes)
+            }
         }
     }
 }
