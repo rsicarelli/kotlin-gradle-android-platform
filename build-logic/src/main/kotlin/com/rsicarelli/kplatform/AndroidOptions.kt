@@ -24,6 +24,7 @@ sealed class AndroidOptions(
         val targetSdk: Int,
         val versionCode: Int,
         val versionName: String,
+        val generateBuildConfig: Boolean,
         override val proguardOptions: ProguardOptions,
         override val namespace: String,
         override val compileSdk: Int,
@@ -139,6 +140,7 @@ class AndroidAppOptionsBuilder : AndroidOptionsBuilder() {
     var targetSdk: Int = 34
     var versionCode: Int = 1
     var versionName: String = "1.0"
+    var generateBuildConfig = false
     private var proguardOptionsBuilder = ProguardOptionsBuilder("proguard-rules.pro")
 
     fun proguardOptions(init: ProguardOptionsBuilder.() -> Unit) {
@@ -158,7 +160,8 @@ class AndroidAppOptionsBuilder : AndroidOptionsBuilder() {
         javaVersion = javaVersion,
         composeOptions = composeOptions,
         packagingOptions = packagingOptions,
-        buildTypes = buildTypes
+        buildTypes = buildTypes,
+        generateBuildConfig = generateBuildConfig
     )
 }
 

@@ -9,6 +9,7 @@ plugins {
 androidApp {
     versionCode = 1
     versionName = "1.0.0"
+    generateBuildConfig = true
 }
 
 dependencies {

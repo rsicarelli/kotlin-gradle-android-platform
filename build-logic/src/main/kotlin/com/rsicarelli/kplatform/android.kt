@@ -29,6 +29,10 @@ internal fun Project.applyAndroidApp(androidAppOptions: AndroidAppOptions) {
             )
         }
 
+        buildFeatures {
+            buildConfig = androidAppOptions.generateBuildConfig
+        }
+
         setAppBuildTypes(androidAppOptions)
     }
 }
