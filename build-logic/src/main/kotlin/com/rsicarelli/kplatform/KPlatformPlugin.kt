@@ -18,11 +18,27 @@ import com.rsicarelli.kplatform.options.SpotlessOptionsBuilder
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
+/**
+ * Represents a platform plugin for a Gradle project.
+ *
+ * By applying this plugin, developers can leverage a suite of predefined configurations, often referred to as
+ * "decorations," to customize and extend their project's behavior.
+ *
+ */
 class KPlatformPlugin : Plugin<Project> {
 
     override fun apply(project: Project) = Unit
 }
 
+/**
+ * Configures the current project as an Android application.
+ *
+ * @param compilationBuilder Lambda to define and customize compilation options.
+ * @param appBuilder Lambda to define and customize Android application-specific options.
+ *
+ * @see CompilationOptionsBuilder for available compilation options.
+ * @see AndroidAppOptionsBuilder for available Android application options.
+ */
 fun Project.androidApp(
     compilationBuilder: CompilationBuilder = { },
     appBuilder: AndroidAppBuilder = { }
@@ -31,6 +47,15 @@ fun Project.androidApp(
     compilationOptions = CompilationOptionsBuilder().apply(compilationBuilder).build()
 )
 
+/**
+ * Configures the current project as an Android library module.
+ *
+ * @param compilationBuilder Lambda to define and customize compilation options.
+ * @param libraryBuilder Lambda to define and customize Android library-specific options.
+ *
+ * @see CompilationOptionsBuilder for available compilation options.
+ * @see AndroidLibraryOptionsBuilder for available Android library options.
+ */
 fun Project.androidLibrary(
     compilationBuilder: CompilationBuilder = { },
     libraryBuilder: AndroidLibraryBuilder = { }
@@ -39,11 +64,33 @@ fun Project.androidLibrary(
     compilationOptions = CompilationOptionsBuilder().apply(compilationBuilder).build()
 )
 
+/**
+ * Configures the current project as a JVM library.
+ *
+ * @param compilationBuilder Lambda to define and customize compilation options for the JVM library.
+ *
+ * @see CompilationOptionsBuilder for available compilation options.
+ */
 fun Project.jvmLibrary(compilationBuilder: CompilationBuilder = { }) =
     applyJvmLibrary(CompilationOptionsBuilder().apply(compilationBuilder).build())
 
+/**
+ * Applies the Detekt static analysis tool to the project. This function configures and runs Detekt
+ * with the provided or default settings.
+ *
+ * @param builderAction Lambda to define and customize options for Detekt analysis.
+ *
+ * @see DetektOptionsBuilder for available Detekt options.
+ */
 fun Project.detekt(builderAction: DetektBuilder = {}) =
     applyDetekt(DetektOptionsBuilder().apply(builderAction).build())
 
+/**
+ * Applies the Spotless code formatting and linting tool to the project.
+ *
+ * @param builderAction Lambda to define and customize options for Spotless.
+ *
+ * @see SpotlessOptionsBuilder for available Spotless options.
+ */
 fun Project.spotless(builderAction: SpotlessBuilder = { }) =
     applySpotless(SpotlessOptionsBuilder().apply(builderAction).build())
