@@ -19,6 +19,15 @@ import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.findByType
 
+/**
+ * Applies common configurations tailored for Android applications.
+ *
+ * @param androidAppOptions Specifies the Android application-specific options.
+ * @param compilationOptions Specifies the compilation options.
+ *
+ * @see AndroidAppOptions
+ * @see CompilationOptions
+ */
 internal fun Project.applyAndroidApp(
     androidAppOptions: AndroidAppOptions,
     compilationOptions: CompilationOptions
@@ -50,6 +59,15 @@ internal fun Project.applyAndroidApp(
     }
 }
 
+/**
+ * Applies common configurations tailored for Android libraries.
+ *
+ * @param androidLibraryOptions Specifies the Android library-specific options.
+ * @param compilationOptions Specifies the compilation options.
+ *
+ * @see AndroidLibraryOptions
+ * @see CompilationOptions
+ */
 internal fun Project.applyAndroidLibrary(
     androidLibraryOptions: AndroidLibraryOptions,
     compilationOptions: CompilationOptions
@@ -78,6 +96,15 @@ internal fun Project.applyAndroidLibrary(
     }
 }
 
+/**
+ * Configures the shared Android settings that are common between applications and libraries.
+ *
+ * @param androidOptions Contains generic Android settings.
+ * @param compilationOptions Specifies the compilation options.
+ *
+ * @see AndroidOptions
+ * @see CompilationOptions
+ */
 private fun Project.applyAndroidCommon(
     androidOptions: AndroidOptions,
     compilationOptions: CompilationOptions
@@ -119,6 +146,12 @@ private fun Project.applyAndroidCommon(
         }
     }
 
+/**
+ * Sets build types for the Android application based on provided options.
+ *
+ * @param options Contains configurations related to Android app's build types.
+ * @see AndroidAppOptions
+ */
 private fun ApplicationExtension.setAppBuildTypes(options: AndroidAppOptions) {
     fun ApplicationBuildType.applyFrom(androidBuildType: AndroidBuildType) {
         isDebuggable = androidBuildType.isDebuggable
@@ -139,6 +172,12 @@ private fun ApplicationExtension.setAppBuildTypes(options: AndroidAppOptions) {
     }
 }
 
+/**
+ * Sets build types for the Android library based on provided options.
+ *
+ * @param options Contains configurations related to Android library's build types.
+ * @see AndroidLibraryOptions
+ */
 private fun LibraryExtension.setLibraryBuildTypes(options: AndroidLibraryOptions) {
     fun LibraryBuildType.applyFrom(androidBuildType: AndroidBuildType) {
         isMinifyEnabled = androidBuildType.isMinifyEnabled
@@ -156,6 +195,15 @@ private fun LibraryExtension.setLibraryBuildTypes(options: AndroidLibraryOptions
     }
 }
 
+/**
+ * Configures Proguard files based on the provided options.
+ *
+ * @param config Configuration object to apply the Proguard settings to.
+ * @param proguardOptions Contains Proguard configurations.
+ * @param consume Lambda to consume the resultant Proguard file paths.
+ *
+ * @see ProguardOptions
+ */
 private fun <T> Project.setProguardFiles(
     config: T,
     proguardOptions: ProguardOptions,
@@ -173,6 +221,15 @@ private fun <T> Project.setProguardFiles(
     }
 }
 
+/**
+ * Retrieves the common extension applicable to the project, either for an application or a library.
+ *
+ * @throws IllegalStateException If neither an application nor a library plugin has been applied.
+ * @return The applicable common extension.
+ * @see ApplicationExtension
+ * @see LibraryExtension
+ * @see CommonExtension
+ */
 private val Project.commonExtension: CommonExtension<*, *, *, *, *>
     get() = extensions.findByType<ApplicationExtension>()
         ?: extensions.findByType<LibraryExtension>()
