@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.flowOf
 
 @Composable
 fun DetailsScreen(
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
     Text(modifier = modifier, text = "Olá mundo!")
 }

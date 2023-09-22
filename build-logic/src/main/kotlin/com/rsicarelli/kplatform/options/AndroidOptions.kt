@@ -16,7 +16,7 @@ internal sealed class AndroidOptions(
     open val composeOptions: ComposeOptions,
     open val packagingOptions: PackagingOptions,
     open val proguardOptions: ProguardOptions,
-    open val buildTypes: List<AndroidBuildType>,
+    open val buildTypes: List<AndroidBuildType>
 ) {
 
     internal data class AndroidAppOptions(
@@ -33,7 +33,7 @@ internal sealed class AndroidOptions(
         override val javaVersion: JavaVersion,
         override val composeOptions: ComposeOptions,
         override val packagingOptions: PackagingOptions,
-        override val buildTypes: List<AndroidBuildType>,
+        override val buildTypes: List<AndroidBuildType>
     ) : AndroidOptions(
         namespace = namespace,
         compileSdk = compileSdk,
@@ -56,7 +56,7 @@ internal sealed class AndroidOptions(
         override val javaVersion: JavaVersion,
         override val composeOptions: ComposeOptions,
         override val packagingOptions: PackagingOptions,
-        override val buildTypes: List<AndroidBuildType>,
+        override val buildTypes: List<AndroidBuildType>
     ) : AndroidOptions(
         namespace = namespace,
         compileSdk = compileSdk,
@@ -72,22 +72,22 @@ internal sealed class AndroidOptions(
         internal data class BuildFeatures(
             val generateAndroidResources: Boolean = false,
             val generateResValues: Boolean = false,
-            val generateBuildConfig: Boolean = false,
+            val generateBuildConfig: Boolean = false
         )
     }
 }
 
 internal data class ProguardOptions(
     val fileName: String,
-    val applyWithOptimizedVersion: Boolean = true,
+    val applyWithOptimizedVersion: Boolean = true
 )
 
 internal data class ComposeOptions(
-    val enabled: Boolean = true,
+    val enabled: Boolean = true
 )
 
 internal data class PackagingOptions(
-    val excludes: String = "/META-INF/{AL2.0,LGPL2.1}",
+    val excludes: String = "/META-INF/{AL2.0,LGPL2.1}"
 )
 
 interface AndroidBuildType {

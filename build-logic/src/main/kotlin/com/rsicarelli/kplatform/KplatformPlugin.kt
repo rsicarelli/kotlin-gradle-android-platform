@@ -20,7 +20,7 @@ class KplatformPlugin : Plugin<Project> {
 
 fun Project.androidApp(
     compilationOptionsBuilder: CompilationOptionsBuilder.() -> Unit = { },
-    appOptionsBuilder: AndroidAppOptionsBuilder.() -> Unit = { },
+    appOptionsBuilder: AndroidAppOptionsBuilder.() -> Unit = { }
 ) = applyAndroidApp(
     androidAppOptions = AndroidAppOptionsBuilder().apply(appOptionsBuilder).build(),
     compilationOptions = CompilationOptionsBuilder().apply(compilationOptionsBuilder).build()
@@ -28,7 +28,7 @@ fun Project.androidApp(
 
 fun Project.androidLibrary(
     compilationOptionsBuilder: CompilationOptionsBuilder.() -> Unit = { },
-    libraryOptionsBuilder: AndroidLibraryOptionsBuilder.() -> Unit = { },
+    libraryOptionsBuilder: AndroidLibraryOptionsBuilder.() -> Unit = { }
 ) = applyAndroidLibrary(
     androidLibraryOptions = AndroidLibraryOptionsBuilder().apply(libraryOptionsBuilder).build(),
     compilationOptions = CompilationOptionsBuilder().apply(compilationOptionsBuilder).build()

@@ -14,11 +14,11 @@ import com.rsicarelli.kplatform.features.details.DetailsScreen
 
 @Composable
 fun HomeScreen(
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
     Surface(
         modifier = modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background,
+        color = MaterialTheme.colorScheme.background
     ) {
         Card(
             modifier = Modifier
@@ -28,7 +28,7 @@ fun HomeScreen(
             onClick = { },
             content = {
                 DetailsScreen()
-            },
+            }
         )
     }
 }

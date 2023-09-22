@@ -9,8 +9,7 @@ detekt = "1.23.1"
 detektCompose = "0.2.3"
 kotlin = "1.9.10"
 kotlinCoroutines = "1.7.3"
-klint = "0.48.1"
-spotless = "6.20.0"
+spotless = "6.21.0"
 
 [libraries]
 androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
@@ -41,5 +40,5 @@ android-application = { id = "com.android.application", version.ref = "androidBu
 android-library = { id = "com.android.library", version.ref = "androidBuildTools" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 arturbosch-detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
-diffplug-spotless = { id = "com.diffplug.spotless", version.ref = "spotless"}
+diffplug-spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 rsicarelli-kplatform = { id = "com.rsicarelli.kplatform" }

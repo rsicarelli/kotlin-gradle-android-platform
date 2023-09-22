@@ -5,7 +5,7 @@ data class DetektOptions(
     val buildUponDefaultConfig: Boolean,
     val configFileNames: List<String>,
     val includes: List<String>,
-    val excludes: List<String>,
+    val excludes: List<String>
 )
 
 class DetektOptionsBuilder {

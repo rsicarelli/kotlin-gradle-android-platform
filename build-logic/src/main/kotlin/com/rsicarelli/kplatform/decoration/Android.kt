@@ -21,7 +21,7 @@ import org.gradle.kotlin.dsl.findByType
 
 internal fun Project.applyAndroidApp(
     androidAppOptions: AndroidAppOptions,
-    compilationOptions: CompilationOptions,
+    compilationOptions: CompilationOptions
 ) {
     applyAndroidCommon(
         androidOptions = androidAppOptions,
@@ -52,7 +52,7 @@ internal fun Project.applyAndroidApp(
 
 internal fun Project.applyAndroidLibrary(
     androidLibraryOptions: AndroidLibraryOptions,
-    compilationOptions: CompilationOptions,
+    compilationOptions: CompilationOptions
 ) {
     applyAndroidCommon(
         androidOptions = androidLibraryOptions,
@@ -80,7 +80,7 @@ internal fun Project.applyAndroidLibrary(
 
 private fun Project.applyAndroidCommon(
     androidOptions: AndroidOptions,
-    compilationOptions: CompilationOptions,
+    compilationOptions: CompilationOptions
 ) =
     with(commonExtension) {
         namespace = androidOptions.namespace
@@ -159,7 +159,7 @@ private fun LibraryExtension.setLibraryBuildTypes(options: AndroidLibraryOptions
 private fun <T> Project.setProguardFiles(
     config: T,
     proguardOptions: ProguardOptions,
-    consume: T.(Array<Any>) -> Unit,
+    consume: T.(Array<Any>) -> Unit
 ) {
     if (proguardOptions.applyWithOptimizedVersion) {
         config.consume(

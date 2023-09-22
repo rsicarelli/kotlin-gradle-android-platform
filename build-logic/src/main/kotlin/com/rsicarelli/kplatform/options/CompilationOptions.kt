@@ -7,7 +7,7 @@ data class CompilationOptions(
     val javaVersion: JavaVersion,
     val jvmTarget: String,
     val allWarningsAsErrors: Boolean,
-    val featureOptIns: List<FeatureOptIn>,
+    val featureOptIns: List<FeatureOptIn>
 ) {
 
     val extraFreeCompilerArgs: List<String>
@@ -15,7 +15,7 @@ data class CompilationOptions(
 
     enum class FeatureOptIn(val flag: String) {
         ExperimentalMaterial3("androidx.compose.material3.ExperimentalMaterial3Api"),
-        ExperimentalCoroutinesApi(flag = "kotlinx.coroutines.ExperimentalCoroutinesApi"),
+        ExperimentalCoroutinesApi(flag = "kotlinx.coroutines.ExperimentalCoroutinesApi")
     }
 }
 

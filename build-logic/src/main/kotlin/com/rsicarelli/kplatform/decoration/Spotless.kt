@@ -12,31 +12,45 @@ data class SpotlessOptions(
     val hookOnBuild: Boolean = false,
     val kotlinRules: SpotlessKotlinRules = SpotlessKotlinRules(),
     val kotlinFileRules: SpotlessKotlinFileRules = SpotlessKotlinFileRules(),
-    val xmlRules: SpotlessXmlRules = SpotlessXmlRules(),
+    val xmlRules: SpotlessXmlRules = SpotlessXmlRules()
 )
 
 data class SpotlessKotlinRules(
     val targets: List<String> = listOf("**/*.kt"),
     val excludes: List<String> = listOf("**/build/**/*.kt", "**/test/**", "**/androidTest/**", "**/*.Test.kt"),
-    val userData: HashMap<String, String> = hashMapOf("android" to "true"),
+    val userData: HashMap<String, String> = hashMapOf("android" to "true")
 )
 
 data class SpotlessKotlinFileRules(
     val fileExtension: String = "kts",
     val targets: List<String> = listOf("**/*.kts"),
-    val excludes: List<String> = listOf("**/build/**/*.kts"),
+    val excludes: List<String> = listOf("**/build/**/*.kts")
 )
 
 data class SpotlessXmlRules(
     val targets: List<String> = listOf("**/*.xml"),
-    val excludes: List<String> = listOf("**/build/**/*.xml"),
+    val excludes: List<String> = listOf("**/build/**/*.xml")
 )
 
 internal fun Project.applySpotless(spotlessConfig: SpotlessOptions) {
     val project = this
 
-    if (spotlessConfig.hookOnBuild)
+    if (spotlessConfig.hookOnBuild) {
         applySpotlessForBuildTask()
+    }
+
+    apply<SpotlessPlugin>()
+
+    extensions.configure<SpotlessExtension> {
+        setupKotlin(
+            config = spotlessConfig.kotlinRules,
+            project = project
+        )
+
+        setupKotlinDsl(spotlessConfig.kotlinFileRules)
+
+        setupXml(spotlessConfig.xmlRules)
+    }
 
     rootProject.apply {
         subprojects {
@@ -66,7 +80,7 @@ private fun SpotlessExtension.setupKotlin(config: SpotlessKotlinRules, project: 
     kotlin {
         target(config.targets)
         targetExclude(config.excludes)
-        ktlint(project.libs.findVersion("klint").get().toString())
+        ktlint()
             .userData(config.userData)
             .setEditorConfigPath("${project.rootDir}/.editorconfig")
         endWithNewline()
