@@ -2,10 +2,12 @@ package com.rsicarelli.kplatform
 
 import com.rsicarelli.kplatform.decoration.applyAndroidApp
 import com.rsicarelli.kplatform.decoration.applyAndroidLibrary
+import com.rsicarelli.kplatform.decoration.applyDetekt
 import com.rsicarelli.kplatform.decoration.applyJvmLibrary
 import com.rsicarelli.kplatform.options.AndroidAppOptionsBuilder
 import com.rsicarelli.kplatform.options.AndroidLibraryOptionsBuilder
 import com.rsicarelli.kplatform.options.CompilationOptionsBuilder
+import com.rsicarelli.kplatform.options.DetektOptionsBuilder
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
@@ -34,3 +36,9 @@ fun Project.jvmLibrary(builderAction: CompilationOptionsBuilder.() -> Unit = { }
     applyJvmLibrary(
         compilationOptions = CompilationOptionsBuilder().apply(builderAction).build()
     )
+
+fun Project.detekt(builderAction: DetektOptionsBuilder.() -> Unit = {}) {
+    applyDetekt(
+        DetektOptionsBuilder().apply(builderAction).build()
+    )
+}

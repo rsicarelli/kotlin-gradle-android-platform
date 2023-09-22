@@ -5,6 +5,7 @@ plugins {
 dependencies {
     compileOnly(libs.gradlePlugin.android)
     compileOnly(libs.gradlePlugin.kotlin)
+    compileOnly(libs.gradlePlugin.detekt)
 }
 
 gradlePlugin {
