@@ -26,6 +26,7 @@ internal fun Project.applyKotlinOptions(compilationOptions: CompilationOptions) 
         kotlinOptions {
             allWarningsAsErrors = compilationOptions.allWarningsAsErrors
             jvmTarget = compilationOptions.jvmTarget
+            compilerOptions.freeCompilerArgs.addAll(compilationOptions.extraFreeCompilerArgs)
         }
     }
 }
