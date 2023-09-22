@@ -3,75 +3,95 @@ package com.rsicarelli.kplatform
 import com.android.build.api.dsl.ApplicationExtension
 import com.android.build.api.dsl.CommonExtension
 import com.android.build.api.dsl.LibraryExtension
-import org.gradle.api.JavaVersion
+import com.rsicarelli.kplatform.AndroidOptions.AndroidAppOptions
+import com.rsicarelli.kplatform.AndroidOptions.AndroidLibraryOptions
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.findByType
 
-internal fun Project.applyAndroidApp() {
-    applyAndroidCommon()
+internal fun Project.applyAndroidApp(androidAppOptions: AndroidAppOptions) {
+    applyAndroidCommon(androidAppOptions)
 
     extensions.configure<ApplicationExtension> {
         defaultConfig {
-            applicationId = "com.rsicarelli.kplatform"
-            targetSdk = 34
-            versionCode = 1
-            versionName = "1.0"
+            applicationId = androidAppOptions.applicationId
+            targetSdk = androidAppOptions.targetSdk
+            versionCode = androidAppOptions.versionCode
+            versionName = androidAppOptions.versionName
         }
 
         buildTypes {
             release {
                 isMinifyEnabled = false
-                proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+                androidAppOptions.proguardOptions.applyWithOptimizedVersion.takeIf { it }
+                    ?.let {
+                        proguardFiles(
+                            getDefaultProguardFile("proguard-android-optimize.txt"),
+                            androidAppOptions.proguardOptions.fileName
+                        )
+                    } ?: proguardFiles(androidAppOptions.proguardOptions.fileName)
             }
         }
     }
 }
 
-internal fun Project.applyAndroidLibrary() {
-    applyAndroidCommon()
+internal fun Project.applyAndroidLibrary(androidLibraryOptions: AndroidLibraryOptions) {
+    applyAndroidCommon(androidLibraryOptions)
 
     extensions.configure<LibraryExtension> {
         buildTypes {
             release {
                 isMinifyEnabled = false
-                proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+
+                androidLibraryOptions.proguardOptions.applyWithOptimizedVersion
+                    .takeIf { it }
+                    ?.let {
+                        consumerProguardFiles(
+                            getDefaultProguardFile("proguard-android-optimize.txt"),
+                            androidLibraryOptions.proguardOptions.fileName
+                        )
+                    } ?: consumerProguardFiles(androidLibraryOptions.proguardOptions.fileName)
             }
         }
     }
 }
 
-private fun Project.applyAndroidCommon() =
+private fun Project.applyAndroidCommon(
+    androidOptions: AndroidOptions,
+) =
     with(commonExtension) {
-        namespace = "com.rsicarelli.kplatform"
-        compileSdk = 34
+        namespace = androidOptions.namespace
+        compileSdk = androidOptions.compileSdk
 
         defaultConfig {
-            minSdk = 24
+            minSdk = androidOptions.minSdk
 
             vectorDrawables {
-                useSupportLibrary = true
+                useSupportLibrary = androidOptions.useVectorDrawables
             }
         }
 
         compileOptions {
-            sourceCompatibility = JavaVersion.VERSION_17
-            targetCompatibility = JavaVersion.VERSION_17
+            sourceCompatibility = androidOptions.javaVersion
+            targetCompatibility = androidOptions.javaVersion
         }
 
         applyKotlinOptions()
 
-        buildFeatures {
-            compose = true
-        }
+        androidOptions.composeOptions.takeIf(ComposeOptions::enabled)
+            ?.let {
+                buildFeatures {
+                    compose = true
+                }
 
-        composeOptions {
-            kotlinCompilerExtensionVersion = libs.version("composeKotlinCompilerExtension")
-        }
+                composeOptions {
+                    kotlinCompilerExtensionVersion = libs.version("composeKotlinCompilerExtension")
+                }
+            }
 
         packaging {
             resources {
-                excludes += "/META-INF/{AL2.0,LGPL2.1}"
+                excludes += androidOptions.packagingOptions.excludes
             }
         }
     }

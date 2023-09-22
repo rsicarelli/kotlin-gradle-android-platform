@@ -11,6 +11,10 @@ class KplatformPlugin : Plugin<Project> {
     override fun apply(project: Project) = Unit
 }
 
-fun Project.androidApp() = applyAndroidApp()
+fun Project.androidApp(builderAction: AndroidAppOptionsBuilder.() -> Unit = { }) = applyAndroidApp(
+    AndroidAppOptionsBuilder().apply(builderAction).build()
+)
 
-fun Project.androidLibrary() = applyAndroidLibrary()
+fun Project.androidLibrary(builderAction: AndroidLibraryOptionsBuilder.() -> Unit = { }) = applyAndroidLibrary(
+    AndroidLibraryOptionsBuilder().apply(builderAction).build()
+)
