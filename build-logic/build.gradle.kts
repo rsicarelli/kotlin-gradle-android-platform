@@ -12,6 +12,6 @@ dependencies {
 gradlePlugin {
     plugins.register("kplatformPlugin") {
         id = "com.rsicarelli.kplatform"
-        implementationClass = "com.rsicarelli.kplatform.KplatformPlugin"
+        implementationClass = "com.rsicarelli.kplatform.KPlatformPlugin"
     }
 }

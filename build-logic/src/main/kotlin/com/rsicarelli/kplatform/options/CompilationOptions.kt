@@ -1,7 +1,11 @@
+@file:Suppress("MemberVisibilityCanBePrivate")
+
 package com.rsicarelli.kplatform.options
 
 import com.rsicarelli.kplatform.options.CompilationOptions.FeatureOptIn
 import org.gradle.api.JavaVersion
+
+typealias CompilationBuilder = CompilationOptionsBuilder.() -> Unit
 
 data class CompilationOptions(
     val javaVersion: JavaVersion,

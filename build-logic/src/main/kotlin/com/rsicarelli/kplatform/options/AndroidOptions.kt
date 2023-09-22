@@ -7,6 +7,9 @@ import com.rsicarelli.kplatform.options.AndroidOptions.AndroidLibraryOptions
 import com.rsicarelli.kplatform.options.AndroidOptions.AndroidLibraryOptions.BuildFeatures
 import org.gradle.api.JavaVersion
 
+typealias AndroidAppBuilder = AndroidAppOptionsBuilder.() -> Unit
+typealias AndroidLibraryBuilder = AndroidLibraryOptionsBuilder.() -> Unit
+
 internal sealed class AndroidOptions(
     open val namespace: String,
     open val compileSdk: Int,

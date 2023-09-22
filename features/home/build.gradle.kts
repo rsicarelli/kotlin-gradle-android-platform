@@ -7,7 +7,7 @@ plugins {
 }
 
 androidLibrary(
-    compilationOptionsBuilder = {
+    compilationBuilder = {
         optIn(ExperimentalMaterial3)
     }
 )

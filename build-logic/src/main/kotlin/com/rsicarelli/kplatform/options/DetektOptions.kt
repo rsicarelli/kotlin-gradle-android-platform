@@ -1,3 +1,5 @@
+@file:Suppress("MemberVisibilityCanBePrivate")
+
 package com.rsicarelli.kplatform.options
 
 data class DetektOptions(
@@ -7,6 +9,8 @@ data class DetektOptions(
     val includes: List<String>,
     val excludes: List<String>
 )
+
+typealias DetektBuilder = DetektOptionsBuilder.() -> Unit
 
 class DetektOptionsBuilder {
 
