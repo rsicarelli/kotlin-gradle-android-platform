@@ -203,7 +203,7 @@ class ProguardOptionsBuilder(defaultFileName: String) {
     )
 }
 
-class BuildFeaturesBuilder() {
+class BuildFeaturesBuilder {
 
     var generateAndroidResources: Boolean = false
     var generateResValues: Boolean = false

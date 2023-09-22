@@ -10,6 +10,7 @@ import com.rsicarelli.kplatform.options.AndroidBuildType
 import com.rsicarelli.kplatform.options.AndroidOptions
 import com.rsicarelli.kplatform.options.AndroidOptions.AndroidAppOptions
 import com.rsicarelli.kplatform.options.AndroidOptions.AndroidLibraryOptions
+import com.rsicarelli.kplatform.options.CompilationOptions
 import com.rsicarelli.kplatform.options.ComposeOptions
 import com.rsicarelli.kplatform.options.DebugBuildType
 import com.rsicarelli.kplatform.options.ProguardOptions
@@ -18,8 +19,14 @@ import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.findByType
 
-internal fun Project.applyAndroidApp(androidAppOptions: AndroidAppOptions) {
-    applyAndroidCommon(androidAppOptions)
+internal fun Project.applyAndroidApp(
+    androidAppOptions: AndroidAppOptions,
+    compilationOptions: CompilationOptions,
+) {
+    applyAndroidCommon(
+        androidOptions = androidAppOptions,
+        compilationOptions = compilationOptions
+    )
 
     extensions.configure<ApplicationExtension> {
         defaultConfig {
@@ -43,8 +50,14 @@ internal fun Project.applyAndroidApp(androidAppOptions: AndroidAppOptions) {
     }
 }
 
-internal fun Project.applyAndroidLibrary(androidLibraryOptions: AndroidLibraryOptions) {
-    applyAndroidCommon(androidLibraryOptions)
+internal fun Project.applyAndroidLibrary(
+    androidLibraryOptions: AndroidLibraryOptions,
+    compilationOptions: CompilationOptions,
+) {
+    applyAndroidCommon(
+        androidOptions = androidLibraryOptions,
+        compilationOptions = compilationOptions
+    )
 
     extensions.configure<LibraryExtension> {
         defaultConfig {
@@ -65,7 +78,10 @@ internal fun Project.applyAndroidLibrary(androidLibraryOptions: AndroidLibraryOp
     }
 }
 
-private fun Project.applyAndroidCommon(androidOptions: AndroidOptions) =
+private fun Project.applyAndroidCommon(
+    androidOptions: AndroidOptions,
+    compilationOptions: CompilationOptions,
+) =
     with(commonExtension) {
         namespace = androidOptions.namespace
         compileSdk = androidOptions.compileSdk
@@ -83,7 +99,7 @@ private fun Project.applyAndroidCommon(androidOptions: AndroidOptions) =
             targetCompatibility = androidOptions.javaVersion
         }
 
-        applyKotlinOptions()
+        applyKotlinOptions(compilationOptions)
 
         androidOptions.composeOptions.takeIf(ComposeOptions::enabled)
             ?.let {

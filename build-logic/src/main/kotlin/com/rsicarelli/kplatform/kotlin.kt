@@ -1,5 +1,6 @@
 package com.rsicarelli.kplatform
 
+import com.rsicarelli.kplatform.options.CompilationOptions
 import org.gradle.api.JavaVersion
 import org.gradle.api.Project
 import org.gradle.api.plugins.JavaPluginExtension
@@ -7,11 +8,10 @@ import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-internal fun Project.applyJvmLibrary() {
+internal fun Project.applyJvmLibrary(compilationOptions: CompilationOptions) {
     pluginManager.apply("java-library")
-    applyJavaCompatibility(JavaVersion.VERSION_17)
-    applyKotlinOptions()
-
+    applyJavaCompatibility(compilationOptions.javaVersion)
+    applyKotlinOptions(compilationOptions)
 }
 
 private fun Project.applyJavaCompatibility(javaVersion: JavaVersion) {
@@ -21,10 +21,11 @@ private fun Project.applyJavaCompatibility(javaVersion: JavaVersion) {
     }
 }
 
-internal fun Project.applyKotlinOptions() {
+internal fun Project.applyKotlinOptions(compilationOptions: CompilationOptions) {
     tasks.withType<KotlinCompile>().configureEach {
         kotlinOptions {
-            jvmTarget = "17"
+            allWarningsAsErrors = compilationOptions.allWarningsAsErrors
+            jvmTarget = compilationOptions.jvmTarget
         }
     }
 }
