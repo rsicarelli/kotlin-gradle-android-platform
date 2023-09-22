@@ -7,7 +7,7 @@ import com.rsicarelli.kplatform.options.AndroidOptions.AndroidLibraryOptions
 import com.rsicarelli.kplatform.options.AndroidOptions.AndroidLibraryOptions.BuildFeatures
 import org.gradle.api.JavaVersion
 
-sealed class AndroidOptions(
+internal sealed class AndroidOptions(
     open val namespace: String,
     open val compileSdk: Int,
     open val minSdk: Int,
@@ -19,7 +19,7 @@ sealed class AndroidOptions(
     open val buildTypes: List<AndroidBuildType>,
 ) {
 
-    data class AndroidAppOptions(
+    internal data class AndroidAppOptions(
         val applicationId: String,
         val targetSdk: Int,
         val versionCode: Int,
@@ -46,7 +46,7 @@ sealed class AndroidOptions(
         buildTypes = buildTypes
     )
 
-    data class AndroidLibraryOptions(
+    internal data class AndroidLibraryOptions(
         val buildFeatures: BuildFeatures,
         override val proguardOptions: ProguardOptions,
         override val namespace: String,
@@ -69,7 +69,7 @@ sealed class AndroidOptions(
         buildTypes = buildTypes
     ) {
 
-        data class BuildFeatures(
+        internal data class BuildFeatures(
             val generateAndroidResources: Boolean = false,
             val generateResValues: Boolean = false,
             val generateBuildConfig: Boolean = false,
@@ -77,16 +77,16 @@ sealed class AndroidOptions(
     }
 }
 
-data class ProguardOptions(
+internal data class ProguardOptions(
     val fileName: String,
     val applyWithOptimizedVersion: Boolean = true,
 )
 
-data class ComposeOptions(
+internal data class ComposeOptions(
     val enabled: Boolean = true,
 )
 
-data class PackagingOptions(
+internal data class PackagingOptions(
     val excludes: String = "/META-INF/{AL2.0,LGPL2.1}",
 )
 
@@ -127,11 +127,11 @@ abstract class AndroidOptionsBuilder {
     var minSdk: Int = 24
     var useVectorDrawables: Boolean = true
     var javaVersion: JavaVersion = JavaVersion.VERSION_17
-    var composeOptions: ComposeOptions = ComposeOptions()
-    var packagingOptions: PackagingOptions = PackagingOptions()
+    internal var composeOptions: ComposeOptions = ComposeOptions()
+    internal var packagingOptions: PackagingOptions = PackagingOptions()
     var buildTypes: List<AndroidBuildType> = listOf(ReleaseBuildType, DebugBuildType)
 
-    abstract fun build(): AndroidOptions
+    internal abstract fun build(): AndroidOptions
 }
 
 class AndroidAppOptionsBuilder : AndroidOptionsBuilder() {
@@ -197,7 +197,7 @@ class ProguardOptionsBuilder(defaultFileName: String) {
     var fileName: String = defaultFileName
     var applyWithOptimizedVersion: Boolean = true
 
-    fun build(): ProguardOptions = ProguardOptions(
+    internal fun build(): ProguardOptions = ProguardOptions(
         fileName = fileName,
         applyWithOptimizedVersion = applyWithOptimizedVersion
     )
@@ -209,7 +209,7 @@ class BuildFeaturesBuilder {
     var generateResValues: Boolean = false
     var generateBuildConfig: Boolean = false
 
-    fun build(): BuildFeatures = BuildFeatures(
+    internal fun build(): BuildFeatures = BuildFeatures(
         generateAndroidResources = generateAndroidResources,
         generateResValues = generateResValues,
         generateBuildConfig = generateBuildConfig

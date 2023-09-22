@@ -2,10 +2,10 @@ package com.rsicarelli.kplatform.options
 
 import org.gradle.api.JavaVersion
 
-data class CompilationOptions(
-    val javaVersion: JavaVersion = JavaVersion.VERSION_17,
-    val jvmTarget: String = "17",
-    val allWarningsAsErrors: Boolean = false,
+internal data class CompilationOptions(
+    val javaVersion: JavaVersion,
+    val jvmTarget: String,
+    val allWarningsAsErrors: Boolean,
 )
 
 class CompilationOptionsBuilder {
@@ -14,7 +14,7 @@ class CompilationOptionsBuilder {
     var jvmTarget: String = "17"
     var allWarningsAsErrors: Boolean = false
 
-    fun build(): CompilationOptions = CompilationOptions(
+    internal fun build(): CompilationOptions = CompilationOptions(
         javaVersion = javaVersion,
         jvmTarget = jvmTarget,
         allWarningsAsErrors = allWarningsAsErrors
