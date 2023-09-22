@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.flowOf
 fun DetailsScreen(
     modifier: Modifier = Modifier,
 ) {
-    Text("Olá mundo!")
+    Text(modifier = modifier, text = "Olá mundo!")
 }
 
 fun main() {

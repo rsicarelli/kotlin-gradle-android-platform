@@ -17,8 +17,8 @@ fun HomeScreen(
     modifier: Modifier = Modifier,
 ) {
     Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background
+        modifier = modifier.fillMaxSize(),
+        color = MaterialTheme.colorScheme.background,
     ) {
         Card(
             modifier = Modifier
@@ -28,7 +28,7 @@ fun HomeScreen(
             onClick = { },
             content = {
                 DetailsScreen()
-            }
+            },
         )
     }
 }

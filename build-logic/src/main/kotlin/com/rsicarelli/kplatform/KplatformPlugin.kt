@@ -1,9 +1,11 @@
 package com.rsicarelli.kplatform
 
+import com.rsicarelli.kplatform.decoration.SpotlessOptions
 import com.rsicarelli.kplatform.decoration.applyAndroidApp
 import com.rsicarelli.kplatform.decoration.applyAndroidLibrary
 import com.rsicarelli.kplatform.decoration.applyDetekt
 import com.rsicarelli.kplatform.decoration.applyJvmLibrary
+import com.rsicarelli.kplatform.decoration.applySpotless
 import com.rsicarelli.kplatform.options.AndroidAppOptionsBuilder
 import com.rsicarelli.kplatform.options.AndroidLibraryOptionsBuilder
 import com.rsicarelli.kplatform.options.CompilationOptionsBuilder
@@ -42,3 +44,5 @@ fun Project.detekt(builderAction: DetektOptionsBuilder.() -> Unit = {}) {
         DetektOptionsBuilder().apply(builderAction).build()
     )
 }
+
+fun Project.spotless() = applySpotless(SpotlessOptions())
