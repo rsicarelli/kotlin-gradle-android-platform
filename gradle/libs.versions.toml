@@ -4,7 +4,7 @@ composeKotlinCompilerExtension = "1.5.3"
 androidxCoreKtx = "1.12.0"
 androidxLifecycleRuntimeKtx = "2.6.2"
 androidxComposeActivity = "1.7.2"
-androidBuildTools = "8.1.0"
+androidBuildTools = "8.1.1"
 kotlin = "1.9.10"
 
 [libraries]
