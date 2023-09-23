@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) Rodrigo Sicarelli 2023.
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+
 <resources>
     <style name="Theme.Kplatform" parent="android:Theme.Material.Light.NoActionBar"/>
 </resources>
