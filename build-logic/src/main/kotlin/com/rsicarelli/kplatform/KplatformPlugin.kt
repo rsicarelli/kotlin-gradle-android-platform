@@ -1,8 +1,3 @@
-/*
- * Copyright (c) Rodrigo Sicarelli 2023.
- * SPDX-License-Identifier: Apache-2.0
- */
-
 package com.rsicarelli.kplatform
 
 import com.rsicarelli.kplatform.decoration.applyAndroidApp
