@@ -8,6 +8,8 @@
  */
 package com.rsicarelli.kplatform
 
+import com.rsicarelli.kplatform.decorations.applyAndroidApp
+import com.rsicarelli.kplatform.decorations.applyAndroidLibrary
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
