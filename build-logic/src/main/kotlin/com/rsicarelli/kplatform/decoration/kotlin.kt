@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package com.rsicarelli.kplatform
+package com.rsicarelli.kplatform.decoration
 
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.withType
