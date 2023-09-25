@@ -1,4 +1,8 @@
-# KPlatform
+# kotlin-gradle-android-plugins
+
+This project serves as an educational content for learning how to create an Android platform.
+
+
 
 ## License
 
