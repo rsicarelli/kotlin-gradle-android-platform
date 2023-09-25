@@ -25,5 +25,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "kplatform"
+rootProject.name = "kotlin-gradle-android-platform"
 include(":app", ":features:details", ":features:home", ":core:designsystem", ":core:threading")
