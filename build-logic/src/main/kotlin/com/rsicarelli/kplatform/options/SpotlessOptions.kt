@@ -18,7 +18,7 @@ typealias SpotlessBuilder = SpotlessOptionsBuilder.() -> Unit
  * @property fileRules A list of rules for how files should be formatted by Spotless.
  */
 data class SpotlessOptions(
-    val fileRules: List<SpotlessFileRule> = listOf(SpotlessKtRule, SpotlessXmlRule),
+    val fileRules: List<SpotlessFileRule> = listOf(SpotlessKtsRule, SpotlessXmlRule),
 )
 
 /**
@@ -38,7 +38,7 @@ interface SpotlessFileRule {
 /**
  * A [SpotlessFileRule] for formatting Kotlin Script files.
  */
-object SpotlessKtRule : SpotlessFileRule {
+object SpotlessKtsRule : SpotlessFileRule {
 
     override val fileExtension: String = "kts"
     override val targets: List<String> = listOf("**/*.kts")
@@ -62,7 +62,7 @@ object SpotlessXmlRule : SpotlessFileRule {
  */
 class SpotlessOptionsBuilder {
 
-    var fileRules: List<SpotlessFileRule> = listOf(SpotlessKtRule, SpotlessXmlRule)
+    var fileRules: List<SpotlessFileRule> = listOf(SpotlessKtsRule, SpotlessXmlRule)
 
     internal fun build(): SpotlessOptions = SpotlessOptions(
         fileRules = fileRules
