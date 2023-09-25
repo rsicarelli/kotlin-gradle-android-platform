@@ -8,7 +8,6 @@ import com.rsicarelli.kplatform.androidApp
 plugins {
     id(libs.plugins.android.application.get().pluginId)
     kotlin("android")
-    id(libs.plugins.rsicarelli.kplatform.get().pluginId)
 }
 
 androidApp {

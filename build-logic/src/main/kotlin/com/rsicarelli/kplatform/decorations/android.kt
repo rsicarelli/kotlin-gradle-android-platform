@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package com.rsicarelli.kplatform
+package com.rsicarelli.kplatform.decorations
 
 import com.android.build.api.dsl.ApplicationBuildType
 import com.android.build.api.dsl.ApplicationExtension
@@ -11,8 +11,14 @@ import com.android.build.api.dsl.CommonExtension
 import com.android.build.api.dsl.LibraryBuildType
 import com.android.build.api.dsl.LibraryExtension
 import com.android.build.gradle.ProguardFiles.getDefaultProguardFile
+import com.rsicarelli.kplatform.AndroidBuildType
+import com.rsicarelli.kplatform.AndroidOptions
 import com.rsicarelli.kplatform.AndroidOptions.AndroidAppOptions
 import com.rsicarelli.kplatform.AndroidOptions.AndroidLibraryOptions
+import com.rsicarelli.kplatform.ComposeOptions
+import com.rsicarelli.kplatform.DebugBuildType
+import com.rsicarelli.kplatform.ProguardOptions
+import com.rsicarelli.kplatform.ReleaseBuildType
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.findByType
