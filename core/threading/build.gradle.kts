@@ -7,7 +7,6 @@ import com.rsicarelli.kplatform.jvmLibrary
 
 plugins {
     kotlin("jvm")
-    id(libs.plugins.rsicarelli.kplatform.get().pluginId)
 }
 
 jvmLibrary()
