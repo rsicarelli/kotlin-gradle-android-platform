@@ -1,5 +1,7 @@
 # kotlin-gradle-android-plugins
 
+Artigo original: [**Parte 0: Introdução a série**](https://dev.to/rsicarelli/android-plataforma-parte-0-introducao-a-serie-1ffe)
+
 No mundo do desenvolvimento Android, enfrentamos um fluxo contínuo de novidades: novos dispositivos, atualizações do SDK e uma variedade de bibliotecas e ferramentas que são lançadas todos os dias.
 
 Junte a isso as constantes alterações, depreciações e a pressão do negócio para entregar funcionalidades que atendam às necessidades dos clientes. Este cenário volátil torna-se um desafio para manter nosso código organizado, eficiente e escalável.
